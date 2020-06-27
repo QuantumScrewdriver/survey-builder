@@ -9,9 +9,6 @@ Key terms used throughout the project
   study
     a fully configured experiment for a participant that consists of FIXME
 
-  researcher
-    the person who runs individual studies
-
   instance
     a deployment of the statistical perceptions platform consisting contained in
     one Heroku app. An instance of the app consists of one set of databases.

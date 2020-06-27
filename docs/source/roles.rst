@@ -21,3 +21,8 @@ to the system
 
   developer
     builds, maintains and administers systems; manages app deployment
+
+  PI
+    lead researchers of either discipline; faculty; need access to all, for
+    longevity reasons, can be trusted to have access to things they do not
+    understand

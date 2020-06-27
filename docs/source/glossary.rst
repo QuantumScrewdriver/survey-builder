@@ -1,4 +1,10 @@
+Glossary
+--------
+
+Key terms used throughout the project
+
 .. glossary::
+  :sorted:
 
   study
     a fully configured experiment for a participant that consists of FIXME

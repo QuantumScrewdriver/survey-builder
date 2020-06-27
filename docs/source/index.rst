@@ -9,6 +9,17 @@ Welcome to Survey Builder's documentation!
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
+   
+   glossary.rst
+   roles.rst
+   technical-overview.rst
+
+
+
+Here we describe the basic use case of setting up and running experiments with our
+tool.
+
+
 
 
 
@@ -18,3 +29,4 @@ Indices and tables
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
+* :ref:`glossary`

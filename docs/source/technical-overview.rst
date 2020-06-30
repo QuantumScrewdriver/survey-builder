@@ -3,15 +3,54 @@ Technical Overview
 
 .. note: some of this is untrue as of yet, but what will, for planning purposes
 
-When development is complete and all components needed for a set of experiments
-exist, an :term:`instance` of the apps should be deployed.
+When development is complete and all components needed for a set of studies
+exist, an :term:`instance` of the platform should be deployed.
 
 
-A :term:`scientist` who wants to run a :term:`study` will create an account on that instance
-and log in to their account.
+A :term:`scientist` who wants to run a :term:`study` will create an account on
+ that instance and log in to their account.
 The scientist will choose what type of experiment for the given study and then
 set the parameters that the experiment requires as required for the specific
 hypotheses of the current study.
+
+The scientist will interact with a configuration app that has a react frontend
+and a flask backend. The flask part will import a package that defines the types
+of experiments and integrate with the MongoDB.
+
+The Experiment package will implement a class for each type of experiment that
+has methods needed to collect necessary scientist selected parameters,
+compute the needed values to generate the display for the participant, and store
+those to the MongoDB. Each class will also contain methods to read from the
+retrieved json to pass it to the frontend.
+
+When the study is configured ....(qualtrics stuff)
+
+The participant will interact with a separate app, based on the custom URL that
+directs them to the right configuration for the app. THey will enter their unique
+identifier and then be presented with the interactive questions as needed.
+
+
+Question Types
+----------------
+
+**Normal Curves**
+control: slider that controls how much two curves overlap
+parameters: variances, labeling (group names, text for axis of comparison)
+records: amount of overlapm(or two locations, to compute later)
+
+**Fairness metric tradeoff**
+control: slider to move decision boundary according to optimizing for one or
+another metric
+parameters: ROC?/ tbd, labeling
+records: preferred location of tradeoff
+
+
+Survey formats
+---------------
+
+
+FIXME
+
 
 Instance Contents
 -----------------

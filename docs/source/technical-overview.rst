@@ -8,7 +8,7 @@ exist, an :term:`instance` of the platform should be deployed.
 
 
 A :term:`scientist` who wants to run a :term:`study` will create an account on
- that instance and log in to their account.
+ that :term:`instance` and log in to their account.
 The scientist will choose what type of experiment for the given study and then
 set the parameters that the experiment requires as required for the specific
 hypotheses of the current study.
@@ -25,31 +25,48 @@ retrieved json to pass it to the frontend.
 
 When the study is configured ....(qualtrics stuff)
 
-The participant will interact with a separate app, based on the custom URL that
-directs them to the right configuration for the app. THey will enter their unique
+The participant will interact with FIXME:app2, based on the custom URL that
+directs them to the right configuration for the app. They will enter their unique
 identifier and then be presented with the interactive questions as needed.
 
 
-Question Types
+Item Types
 ----------------
 
 **Normal Curves**
-control: slider that controls how much two curves overlap
+for questions about groupwise comparisons
+control: slider that controls how much two curves overlap, next button
 parameters: variances, labeling (group names, text for axis of comparison)
-records: amount of overlapm(or two locations, to compute later)
+records: amount of overlap(or two locations, to compute later)
 
 **Fairness metric tradeoff**
+for tradeoffs between competing metrics
 control: slider to move decision boundary according to optimizing for one or
-another metric
+another metric, next button
 parameters: ROC?/ tbd, labeling
 records: preferred location of tradeoff
 
 
-Survey formats
+**Static Information**
+for added information between prompts
+control: next button
+paramters: text and images or link to video to embed
+records: nothing
+
+
+Experiment formats
 ---------------
 
+- 1 interactive item
+- interactive item, static, interactive
 
-FIXME
+
+Study Formats
+--------------------
+
+- qualtrics surveys + single interactive experiment for all subjects
+- qualtrics surveys + 2 interactive experiments to which subjects are randomzied
+
 
 
 Instance Contents

@@ -15,7 +15,8 @@ Key terms used throughout the project
 
   experiment
     a template for studies. a given experiment can be run many times with
-    different settings for different studies.
+    different settings for different studies. an experiment consists of a set
+    of items of a given type but may have different values of parameters
 
   app
     FIXME as in app1 and app2
@@ -24,4 +25,4 @@ Key terms used throughout the project
     a group of items
 
   item
-    an individual widget
+    an individual interactive component to be displayed to the participant

@@ -19,7 +19,7 @@ Key terms used throughout the project
     of items of a given type but may have different values of parameters
 
   app
-    FIXME as in app1 and app2
+    a website, on which experiments can be either designed and saved, or on which experiments can be run by survey respondents
 
   survey
     a group of items

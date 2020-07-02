@@ -47,8 +47,8 @@ parameters: ROC?/ tbd, labeling
 records: preferred location of tradeoff
 
 
-**Static Information**
-for added information between prompts
+**Information**
+for added information between prompts, noninteractive, may depend on previous responses
 control: next button
 paramters: text and images or link to video to embed
 records: nothing

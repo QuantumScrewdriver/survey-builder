@@ -7,7 +7,7 @@ Key terms used throughout the project
   :sorted:
 
   study
-    a fully configured experiment for a participant that consists of FIXME
+    a fully configured experiment for a participant that consists of qualtrics surveys and an experiment on this platform including a specific cohort of subjects
 
   instance
     a deployment of the statistical perceptions platform consisting contained in

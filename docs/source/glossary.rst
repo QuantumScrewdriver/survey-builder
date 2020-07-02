@@ -14,9 +14,7 @@ Key terms used throughout the project
     one Heroku app. An instance of the app consists of one set of databases.
 
   experiment
-    a template for studies. a given experiment can be run many times with
-    different settings for different studies. an experiment consists of a set
-    of items of a given type but may have different values of parameters
+    a group of items with all parameters set. 
 
   app
     a website, on which experiments can be either designed and saved, or on which experiments can be run by survey respondents

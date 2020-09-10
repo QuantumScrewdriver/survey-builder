@@ -1,10 +1,10 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "9b8759b2b9ffd57e672628141b5771e9",
+    "revision": "b3df2231507a1974766ee4168e252284",
     "url": "/survey-builder/index.html"
   },
   {
-    "revision": "c5adfc97c293f04f5958",
+    "revision": "608bdb393c0cd491bb37",
     "url": "/survey-builder/static/css/main.4f1c074b.chunk.css"
   },
   {
@@ -16,8 +16,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/survey-builder/static/js/2.5a302cb5.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "c5adfc97c293f04f5958",
-    "url": "/survey-builder/static/js/main.b057a0ec.chunk.js"
+    "revision": "608bdb393c0cd491bb37",
+    "url": "/survey-builder/static/js/main.24f12ae1.chunk.js"
   },
   {
     "revision": "e837850a688d91310f9c",

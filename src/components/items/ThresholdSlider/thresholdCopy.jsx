@@ -64,9 +64,6 @@ class ThresholdCurve extends Component {
       this.rectReturn7 = this.rectReturn7.bind(this);
       this.rectReturn8 = this.rectReturn8.bind(this);
       this.textReturn = this.textReturn.bind(this);
-      this.getTopDistance = this.getTopDistance.bind(this);
-      this.updateLocation = this.updateLocation.bind(this);
-      this.updateHeight = this.updateHeight.bind(this);
 
 
       this.establishStateData = this.establishStateData.bind(this);
@@ -185,26 +182,13 @@ class ThresholdCurve extends Component {
         maxVal : data["maxVal"],
         legendKey : data["legendKey"],
         displayArr5 : data["displayArr5"],
-        refArr5 : data["refArr5"],
-        slider1 : 0,
-        slider2 : 0
+        refArr5 : data["refArr5"]
       }
     }
 
 
 
 dotReturn1(xPos, yPos) {
-    // var hard = 
-    // <circle 
-    // // onMouseEnter={e => this.displayTag1(e)}
-    // // onMouseLeave={e => this.hideTag1(e)}
-    // // onMouseMove={e => this.updateTag1(e)} 
-    // className="icon" 
-    // stroke={this.state.stroke1} 
-    // fill={this.state.fill1}
-    // fillOpacity="1" 
-    // strokeOpacity="1" cx={xPos} cy={yPos} r={this.state.rad}>
-    // </circle>;
     var hard = 
     <circle 
     // onMouseEnter={e => this.displayTag1(e)}
@@ -336,42 +320,6 @@ dotReturn1(xPos, yPos) {
     return hard;
   }
 
-  getTopDistance(element) {
-    var yPosition = 0;
-
-    while(element) {
-        yPosition += (element.offsetTop - element.scrollTop + element.clientTop);
-        element = element.offsetParent;
-    }
-
-    return yPosition;
-  }
-
-  updateHeight(clientHeight) {
-    var svgPre = this.svgRef.current;
-    var ptPre = svgPre.createSVGPoint();
-    // ptPre.y = element.clientY;
-    ptPre.y = clientHeight;
-    var svgPPre = ptPre.matrixTransform(svgPre.getScreenCTM().inverse());
-    return svgPPre.y;
-  }
-
-  updateLocation(svgY) {
-    var svgPre = this.svgRef.current;
-    var ptPre = svgPre.createSVGPoint();
-    // ptPre.y = element.clientY;
-    ptPre.y = svgY;
-    var svgPPre = ptPre.matrixTransform(svgPre.getScreenCTM());
-    return svgPPre.y;
-  }
-
-  componentDidMount() {
-    // const elementHeightInSVG = this.updateHeight(200);
-    this.setState({
-      slider1: this.updateLocation(235),
-      slider2: this.updateLocation(265) + 200 + 5})
-  }
-
   render() {
     return (
       <div>
@@ -418,12 +366,11 @@ dotReturn1(xPos, yPos) {
         <input type="range" min={this.state.minVal} max={this.state.maxVal} 
               className="hist-slider" onChange={this.onChange1}
               name="sliderPos" value={this.state.sliderPos} ref={this.sliderRef}
-              style={{ width: this.state.width, left:115, top:this.state.slider1}}
-              />
+              style={{ width: this.state.width, left:115}}/>
             <input type = "range" min = {this.state.minVal} max = {this.state.maxVal}
             className = "hist-slider-two" onChange={this.onChange2}
             name = "sliderPos2" value = {this.state.sliderPos2} ref = {this.slider2Ref}
-            style = {{width: this.state.width, left:115, top:this.state.slider2}}/>
+            style = {{width: this.state.width, left:115}}/>
         </div>  
                 <label>Choose a color combination (the first color is on top): </label>
                   <select name="stroke1" id="stroke1" ref={this.stroke1Ref}

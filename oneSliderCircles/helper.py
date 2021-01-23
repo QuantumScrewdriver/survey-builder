@@ -22,12 +22,13 @@ def needlesslyArrested(arr1,arr2):
         j = j - 1
     return finalArr
 def main():
-    width = int(input("Please enter the width of your graph (700 reccomended)"))
+    width = int(input("Please enter the width of your graph (1000 reccomended)"))
     height = int(input("Please enter the height of your graph (500 reccommended"))
     colNum = int(input("Please enter the number of column groups (e.g., for compas scores, 10)"))
     colWidth = width/colNum
     dotNum = int(input("Please enter the number of dots you want in each row of each column (3-5 is recommended)"))
     r = 10
+    r2 = 3
     midLine = height/2
     
     firstPopBottom = []
@@ -149,7 +150,7 @@ def main():
     d["fill4"] = secondPopTrueFIll
     d["height"] = height
     d["width"] = width
-    d["circRad"] = r
+    d["circRad"] = r2
     d["displayArr1"] = 
     d["displayArr2"] = 
     d["displayArr4"] = 

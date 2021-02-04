@@ -51,6 +51,7 @@ class TabList extends Component {
     this.saveFile = this.saveFile.bind(this);
     this.onChange = this.onChange.bind(this);
     this.appendToKeysArr = this.appendToKeysArr.bind(this);
+    this.checkValidInput = this.checkValidInput.bind(this);
   }
 
   componentDidMount() {
@@ -374,6 +375,17 @@ class TabList extends Component {
   }
 
   /**
+   * A function to check if user has put in required information
+   */
+  checkValidInput() {
+    if (this.nameRef.current.value == '') {
+      alert("Please enter the name of your experiment.");
+      return false;
+    };
+    return true;
+  }
+
+  /**
    * Create a final json object containing an experiment's config data
    * and send the object to database
    * @param {[Boolean]} newExpt [whether the experiment is new]
@@ -401,10 +413,7 @@ class TabList extends Component {
     // var validName = this.nameRef.current.value.length > 0;
     // if (!(0 in obj) || !this.checkOutput(obj) || !validName) {
     // if (!validName) {
-    if (false) {
-      alert("You have not filled out all fields, or have entered an invalid value!");
-    }
-    else {
+    if (this.checkValidInput()) {
       var finalObj = {};
       finalObj["exptName"] = this.nameRef.current.value;
       var int = 0;
@@ -444,6 +453,7 @@ class TabList extends Component {
           window.location.reload(false);
         })
         .catch(function (error) {
+          alert("Failed to create the survey");
           console.log(error);
         });
       } else {
@@ -562,8 +572,8 @@ class TabList extends Component {
           }
         </div>
         <br/>
-        {/* <button onClick={() => console.log(finalObj)}>Show finalObj</button><br/>
-        <button onClick={() => console.log(this.state.files)}>Show files</button> */}
+        {/* <button onClick={() => console.log(finalObj)}>Show finalObj</button><br/> */}
+        {/* <button onClick={() => console.log(this.state.files)}>Show files</button> */}
       </div>
     )
   }

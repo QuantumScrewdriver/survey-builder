@@ -13,6 +13,7 @@ import NormalCurve from '../items/NormalCurve/NormalCurve';
 import NormalCurveResearch from '../items/NormalCurve/NormalCurveResearch';
 import HistogramResearch from '../items/Threshold/HistogramResearch';
 import ThresholdResearch from '../items/ThresholdSlider/thresholdReasearch';
+import GraphSlider from '../items/GraphSlider/GraphSlider';
 
 import { 
   sendFile,
@@ -130,6 +131,16 @@ class TabList extends Component {
                   key={this.state.count.toString()}/>
         })
         break;
+      case "graph-slider":
+        arr.push({
+          id: this.state.count,
+          tab: <GraphSlider getCount={this.getCount} 
+                  delete={this.delete} count={this.state.count}
+                  handleChange={this.handleChange} 
+                  files={this.state.files} saveFile={this.saveFile}
+                  key={this.state.count.toString()}/>
+        })
+        break;
       default:
         arr = <div>Unknown Element</div>
     }
@@ -155,6 +166,8 @@ class TabList extends Component {
         return "normal-curve-question-key"
       case "threshold":
         return "threshold-key"
+      case "graph-slider":
+        return "graph-slider-key"
       default:
         return ""
     }
@@ -249,6 +262,16 @@ class TabList extends Component {
                   key={this.state.count.toString()}/>
         })
         break;
+        case "graph-slider":
+          arr.push({
+            id: this.state.count,
+            tab: <GraphSlider getCount={this.getCount} 
+                    delete={this.delete} count={this.state.count}
+                    handleChange={this.handleChange} 
+                    files={this.state.files} saveFile={this.saveFile}
+                    key={this.state.count.toString()}/>
+          })
+          break;
       default:
         arr = <div>Unknown Element</div>
     };

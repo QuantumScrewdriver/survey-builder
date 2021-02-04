@@ -25,6 +25,8 @@ import ExptConfigs from './components/Study/ExptConfigs';
 import PartStudyData from './components/Study/PartStudyData';
 import PartExptData from './components/Study/PartExptData';
 
+import GraphSliderResearch from './components/items/GraphSlider/GraphSliderResearch';
+
 // Check for token to keep user logged in
 if (localStorage.jwtToken) {
   // Set auth token header auth
@@ -52,7 +54,8 @@ function App() {
           < NavBar />
           <br/>
           < Landing />
-          < Route exact path="/" component={HomePage} />
+          {/* < Route exact path="/" component={HomePage} /> */}
+          < Route exact path="/" component={GraphSliderResearch} />
           < Route exact path="/register" component={Register} />
           < Route exact path="/login" component={Login} />
           <Switch>

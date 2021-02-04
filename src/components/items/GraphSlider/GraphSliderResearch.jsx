@@ -48,14 +48,15 @@ class GraphSliderResearch extends Component {
                     const names = lines[0].split(',');
                     const count = lines.length - 1;
                     const dataList = [];
-                    const x_divide = 400.0 / names.length;
+                    const x_divide = 400.0 / names.length + 1;
 
                     // Dealing with points
-                    for (var i = 1; i < count; i++) {
+                    for (var i = 1; i < names.length; i++) {
                         // console.log(names[i]);
                         dataList[i - 1] = {}
                         dataList[i - 1]["points"] = names.length - 1;
                         dataList[i - 1]["color"] = "green";
+                        dataList[i - 1]["name"] = names[i];
                     }
 
                     // Adding x and y coordinates
@@ -65,22 +66,26 @@ class GraphSliderResearch extends Component {
                         for (var word = 1; word < lineSplit.length; word++) {
                             // console.log(lineSplit[word]);
                             const yCoor = (parseFloat(lineSplit[word]) + 1.0) * 75;
-                            const xCoor = (word - 1) * x_divide;
+                            const xCoor = (line - 1) * x_divide;
                             const point = {};
                             point["x"] = xCoor;
                             point["y"] = yCoor;
-                            dataList[line - 1][(word - 1).toString()] = point;
+                            dataList[word - 1][(line - 1).toString()] = point;
                         }
                     }
 
                     // Adding each line to jsonData
-                    for(var i = 0; i < count - 1; i++) {
+                    for(var i = 0; i < names.length - 1; i++) {
                         jsonData[i.toString()] = dataList[i];
                     }
 
+                    const outData = {}
+                    outData['pointsData'] = jsonData;
+                    outData['title'] = "Title";
+
                     this.setState({
                         dataReceived : "true",
-                        jsonData: jsonData
+                        jsonData: outData
                     });
                 };
                 reader.readAsText(file);

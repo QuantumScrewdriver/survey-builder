@@ -8,8 +8,10 @@ class GraphSlider extends Component {
 
         this.createSlider = this.createSlider.bind(this);
         this.svgRef = React.createRef();
+        this.titleRef = React.createRef();
         this.createLine = this.createLine.bind(this);
         this.controlColor = this.controlColor.bind(this);
+        this.controlLineName = this.controlLineName.bind(this);
         const Output = this.props.data;
 
         this.state = {
@@ -19,16 +21,18 @@ class GraphSlider extends Component {
             graphWidth: 300,
             graphHeight: 300,
             tickNum: 4,
-            lines: Object.keys(Output).length,
+            lines: Object.keys(Output['pointsData']).length,
             slideDist: 150,
             ceilDist: 300,
             dragging: false,
-            data: Output,
+            data: Output.pointsData,
             x1: 0,
             x2: 300,
             y1: 0,
-            y2: 300
+            y2: 300,
+            title: Output.title
         }
+        // console.log(Output);
     }
 
     createSlider() {
@@ -68,9 +72,18 @@ class GraphSlider extends Component {
         console.log(e.target.value);
     }
 
+    controlLineName(e, lineNum) {
+        const pointsData = this.state.data;
+        pointsData[lineNum.toString()]["name"] = e.target.value;
+        this.setState({data: pointsData});
+    }
+
     render() {
         return (
             <div className="carrier">
+                <div>
+                    <h1 ref={this.titleRef}>{this.state.title}</h1>
+                </div>
                 <svg 
                 width={this.state.svgWidth} 
                 height={this.state.svgHeight} 
@@ -154,36 +167,65 @@ class GraphSlider extends Component {
                     <text x={this.state.minLoc - 25}
                         y={this.state.ceilDist + this.state.minLoc}>{this.state.y1}</text>
                 </svg>
-                <div>
+                <br />
+                <div class="legend">
+                    {[...Array(this.state.lines).keys()].map(
+                        (line) => 
+                            <div>
+                                <div class="color-box" style={{ backgroundColor: this.state.data[line.toString()].color }}></div>
+                                <span class="option">{this.state.data[line.toString()].name}</span>
+                            </div>
+                    )}
+                </div>
+                <br />
+                <div class="box">
+                    Edit title:
+                    <input type="text" onChange={e => this.setState( {title: e.target.value })} 
+                    class="option"/>
+                </div>
+                <div class="box">
                     First x-coordinate: 
-                    <input type="text" onChange={e => this.setState( {x1: e.target.value})}/>
+                    <input type="text" onChange={e => this.setState( {x1: e.target.value})}
+                    class="option"/>
                 </div>
-                <div>
+                <div class="box">
                     Second x-coordinate: 
-                    <input type="text" onChange={e => this.setState( {x2: e.target.value})}/>
+                    <input type="text" onChange={e => this.setState( {x2: e.target.value})}
+                    class="option"/>
                 </div>
-                <div>
+                <div class="box">
                     First y-coordinate: 
-                    <input type="text" onChange={e => this.setState( {y1: e.target.value})}/>
+                    <input type="text" onChange={e => this.setState( {y1: e.target.value})}
+                    class="option"/>
                 </div>
-                <div>
+                <div class="box">
                     Second y-coordinate: 
-                    <input type="text" onChange={e => this.setState( {y2: e.target.value})}/>
+                    <input type="text" onChange={e => this.setState( {y2: e.target.value})}
+                    class="option"/>
                 </div>
                 {[...Array(this.state.lines).keys()].map(
                     (line) =>
-                    <div>
+                    <div class="box">
                         <span>Select color for line {line}</span>
                         <select 
                             value={this.state.data[line.toString()].color} 
                             onChange={(e) => this.controlColor(line, e)} 
+                            class="option"
                         >
-                            <option value="Blue">Blue</option>
-                            <option value="Green">Green</option>
-                            <option value="Teal">Teal</option>
+                            <option value="blue">Blue</option>
+                            <option value="green">Green</option>
+                            <option value="teal">Teal</option>
                         </select>
                     </div>
                 )}
+                {[...Array(this.state.lines).keys()].map(
+                        (line) => 
+                            <div class="box">
+                                Name for line {line}: 
+                                <input type="text" onChange={e => this.controlLineName(e, line)}
+                                class="option"/>
+                            </div>
+                    )}
             </div>
         )
     }

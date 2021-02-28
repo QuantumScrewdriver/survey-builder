@@ -11,8 +11,6 @@ import SliderTab from '../items/Slider/SliderTab';
 import StaticText from '../items/StaticText/StaticText';
 import NormalCurveResearch from '../items/NormalCurve/NormalCurveResearch';
 import ThresholdResearch from '../items/ThresholdSlider/thresholdReasearch';
-import TradeoffResearch from '../items/Tradeoff/tradeoffResearch';
-import template from '../items/Tradeoff/template';
 
 import { 
   sendFile,
@@ -131,21 +129,6 @@ class TabList extends Component {
                   key={this.state.count.toString()}/>
         })
         break;
-      case "test":
-        arr.push({
-          id : this.state.count,
-          tab: <test/>
-        })
-        break;
-      case "tradeoff":
-        arr.push({
-          id: this.state.count,
-          tab: <TradeoffResearch getCount={this.getCount} 
-          delete={this.delete} count={this.state.count}
-          handleChange={this.handleChange} 
-          saveFile={this.saveFile}
-          key={this.state.count.toString()}/>
-        })
       case "template": 
         arr.push({
           id: this.state.count,
@@ -180,10 +163,6 @@ class TabList extends Component {
         return "normal-curve-question-key"
       case "threshold":
         return "threshold-key"
-      case "test":
-        return "test-key"
-      case "tradeoff":
-        return "tradeoff-key"
       default:
         return ""
     }
@@ -276,16 +255,6 @@ class TabList extends Component {
                   handleChange={this.handleChange} 
                   files={this.state.files} saveFile={this.saveFile}
                   key={this.state.count.toString()}/>
-        })
-        break;
-      case "tradeoff":
-        arr.push({
-          id: this.state.count,
-          tab: <TradeoffResearch getCount={this.getCount} 
-          delete={this.delete} count={this.state.count}
-          handleChange={this.handleChange} 
-          saveFile={this.saveFile}
-          key={this.state.count.toString()}/>
         })
         break;
       default:
@@ -423,10 +392,6 @@ class TabList extends Component {
             index[exptItem["normal-curve-question-key"] + "." + exptItem["normal-curve-legend-key2"]] = exptItem["graph2key"];
           case "threshold":
             index[exptItem["threshold-key"]] = exptItem["Question"];
-          case "tradeoff":
-            index[exptItem["tradeoff-key"]] = exptItem["Question"];
-          case "test":
-            index[exptItem["test-key"]] = exptItem["Question"];
         }
       });
     // var validName = this.nameRef.current.value.length > 0;

@@ -1,25 +1,23 @@
 {
   "files": {
-    "main.css": "/survey-builder/static/css/main.e99648d1.chunk.css",
-    "main.js": "/survey-builder/static/js/main.bf85b7a2.chunk.js",
-    "main.js.map": "/survey-builder/static/js/main.bf85b7a2.chunk.js.map",
-    "runtime-main.js": "/survey-builder/static/js/runtime-main.8a08f172.js",
-    "runtime-main.js.map": "/survey-builder/static/js/runtime-main.8a08f172.js.map",
-    "static/js/2.df7b86c4.chunk.js": "/survey-builder/static/js/2.df7b86c4.chunk.js",
-    "static/js/2.df7b86c4.chunk.js.map": "/survey-builder/static/js/2.df7b86c4.chunk.js.map",
+    "main.css": "/survey-builder/static/css/main.a9332910.chunk.css",
+    "main.js": "/survey-builder/static/js/main.10a18b46.chunk.js",
+    "main.js.map": "/survey-builder/static/js/main.10a18b46.chunk.js.map",
+    "runtime-main.js": "/survey-builder/static/js/runtime-main.5cb16a2e.js",
+    "runtime-main.js.map": "/survey-builder/static/js/runtime-main.5cb16a2e.js.map",
+    "static/js/2.0604fa80.chunk.js": "/survey-builder/static/js/2.0604fa80.chunk.js",
+    "static/js/2.0604fa80.chunk.js.map": "/survey-builder/static/js/2.0604fa80.chunk.js.map",
     "index.html": "/survey-builder/index.html",
-    "precache-manifest.39688120e2ccced9090158c84a143f4d.js": "/survey-builder/precache-manifest.39688120e2ccced9090158c84a143f4d.js",
-    "service-worker.js": "/survey-builder/service-worker.js",
-    "static/css/main.e99648d1.chunk.css.map": "/survey-builder/static/css/main.e99648d1.chunk.css.map",
-    "static/js/2.df7b86c4.chunk.js.LICENSE.txt": "/survey-builder/static/js/2.df7b86c4.chunk.js.LICENSE.txt",
-    "static/media/bigSmall.png": "/survey-builder/static/media/bigSmall.29f3b573.png",
-    "static/media/rlyDiff.png": "/survey-builder/static/media/rlyDiff.06e96a79.png",
-    "static/media/sameSquare.png": "/survey-builder/static/media/sameSquare.8c0ac2fb.png"
+    "static/css/main.a9332910.chunk.css.map": "/survey-builder/static/css/main.a9332910.chunk.css.map",
+    "static/js/2.0604fa80.chunk.js.LICENSE.txt": "/survey-builder/static/js/2.0604fa80.chunk.js.LICENSE.txt",
+    "static/media/bigSmall.51d08596.png": "/survey-builder/static/media/bigSmall.51d08596.png",
+    "static/media/rlyDiff.8b156fd3.png": "/survey-builder/static/media/rlyDiff.8b156fd3.png",
+    "static/media/sameSquare.cb15a9a7.png": "/survey-builder/static/media/sameSquare.cb15a9a7.png"
   },
   "entrypoints": [
-    "static/js/runtime-main.8a08f172.js",
-    "static/js/2.df7b86c4.chunk.js",
-    "static/css/main.e99648d1.chunk.css",
-    "static/js/main.bf85b7a2.chunk.js"
+    "static/js/runtime-main.5cb16a2e.js",
+    "static/js/2.0604fa80.chunk.js",
+    "static/css/main.a9332910.chunk.css",
+    "static/js/main.10a18b46.chunk.js"
   ]
 }

@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/survey-builder/static/css/main.a9332910.chunk.css",
-    "main.js": "/survey-builder/static/js/main.deda1a7d.chunk.js",
-    "main.js.map": "/survey-builder/static/js/main.deda1a7d.chunk.js.map",
+    "main.js": "/survey-builder/static/js/main.b7a02031.chunk.js",
+    "main.js.map": "/survey-builder/static/js/main.b7a02031.chunk.js.map",
     "runtime-main.js": "/survey-builder/static/js/runtime-main.5cb16a2e.js",
     "runtime-main.js.map": "/survey-builder/static/js/runtime-main.5cb16a2e.js.map",
     "static/js/2.0604fa80.chunk.js": "/survey-builder/static/js/2.0604fa80.chunk.js",
@@ -10,6 +10,8 @@
     "index.html": "/survey-builder/index.html",
     "static/css/main.a9332910.chunk.css.map": "/survey-builder/static/css/main.a9332910.chunk.css.map",
     "static/js/2.0604fa80.chunk.js.LICENSE.txt": "/survey-builder/static/js/2.0604fa80.chunk.js.LICENSE.txt",
+    "static/media/TradeoffThree.8489daae.bin": "/survey-builder/static/media/TradeoffThree.8489daae.bin",
+    "static/media/TradeoffTwo.f0fd9fd2.bin": "/survey-builder/static/media/TradeoffTwo.f0fd9fd2.bin",
     "static/media/bigSmall.51d08596.png": "/survey-builder/static/media/bigSmall.51d08596.png",
     "static/media/rlyDiff.8b156fd3.png": "/survey-builder/static/media/rlyDiff.8b156fd3.png",
     "static/media/sameSquare.cb15a9a7.png": "/survey-builder/static/media/sameSquare.cb15a9a7.png"
@@ -18,6 +20,6 @@
     "static/js/runtime-main.5cb16a2e.js",
     "static/js/2.0604fa80.chunk.js",
     "static/css/main.a9332910.chunk.css",
-    "static/js/main.deda1a7d.chunk.js"
+    "static/js/main.b7a02031.chunk.js"
   ]
 }

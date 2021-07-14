@@ -10,12 +10,20 @@ import { Link } from "react-router-dom";
 import SliderTab from '../items/Slider/SliderTab';
 import StaticText from '../items/StaticText/StaticText';
 import NormalCurveResearch from '../items/NormalCurve/NormalCurveResearch';
-import ThresholdCurveResearch from '../items/ThresholdSlider/thresholdReasearch';
+import ThresholdResearch from '../items/ThresholdSlider/thresholdReasearch';
+import Tradeoff from '../items/Tradeoff/tradeoff';
+import TradeoffTwo from '../items/Tradeoff/TradeoffTwo';
+import TradeoffThree from '../items/Tradeoff/TradeoffThree';
+import GraphSliderResearch from '../items/GraphSlider/GraphSliderResearch';
+import tradeoffResearch from '../items/Tradeoff/tradeoffResearch';
+
+
 
 import { 
   sendFile,
   getStudyInfo
 } from '../../actions/dataActions'
+import TradeoffResearch from '../items/Tradeoff/tradeoffResearch';
 
 const axios = require('axios');
 
@@ -122,13 +130,63 @@ class TabList extends Component {
       case "threshold":
         arr.push({
           id: this.state.count,
-          tab: <ThresholdCurveResearch getCount={this.getCount} 
+          tab: <ThresholdResearch getCount={this.getCount} 
                   delete={this.delete} count={this.state.count}
                   handleChange={this.handleChange} 
                   files={this.state.files} saveFile={this.saveFile}
                   key={this.state.count.toString()}/>
         })
         break;
+        case "tradeoff":
+          arr.push({
+            id: this.state.count,
+            tab: <Tradeoff getCount={this.getCount} 
+                    delete={this.delete} count={this.state.count}
+                    handleChange={this.handleChange} 
+                    files={this.state.files} saveFile={this.saveFile}
+                    key={this.state.count.toString()}/>
+          })
+          break;
+        case "tradeofftwo":
+            arr.push({
+              id: this.state.count,
+              tab: <TradeoffTwo getCount={this.getCount} 
+                      delete={this.delete} count={this.state.count}
+                      handleChange={this.handleChange} 
+                      files={this.state.files} saveFile={this.saveFile}
+                      key={this.state.count.toString()}/>
+            })
+          break;
+          case "tradeoffthree":
+              arr.push({
+                id: this.state.count,
+                tab: <TradeoffResearch getCount={this.getCount} data = {[]}
+                        delete={this.delete} count={this.state.count}
+                        handleChange={this.handleChange} 
+                        files={this.state.files} saveFile={this.saveFile}
+                        key={this.state.count.toString()}/>
+              })
+             break;
+
+             case "graphslider":
+              arr.push({
+                id: this.state.count,
+                tab: <GraphSliderResearch getCount={this.getCount} 
+                        delete={this.delete} count={this.state.count}
+                        handleChange={this.handleChange} 
+                        files={this.state.files} saveFile={this.saveFile}
+                        key={this.state.count.toString()}/>
+              })
+             break;
+      case "template": 
+        arr.push({
+          id: this.state.count,
+          tab: <template getCount={this.getCount} 
+                  delete={this.delete} count={this.state.count} 
+                  handleChange={this.handleChange} 
+                  files={this.state.files} saveFile={this.saveFile}
+                  key={this.state.count.toString()}/> 
+        })
       default:
         arr = <div>Unknown Element</div>
     }
@@ -241,13 +299,33 @@ class TabList extends Component {
       case "threshold":
         arr.push({
           id: this.state.count,
-          tab: <ThresholdCurveResearch getCount={this.getCount} 
+          tab: <ThresholdResearch getCount={this.getCount} 
                   delete={this.delete} count={this.state.count}
                   handleChange={this.handleChange} 
                   files={this.state.files} saveFile={this.saveFile}
                   key={this.state.count.toString()}/>
         })
         break;
+      case "tradeoff":
+        arr.push({
+          id: this.state.count,
+          tab: <Tradeoff getCount={this.getCount} 
+                  delete={this.delete} count={this.state.count}
+                  handleChange={this.handleChange} 
+                  files={this.state.files} saveFile={this.saveFile}
+                  key={this.state.count.toString()}/>
+        })
+        break;
+        case "tradeoffthree":
+          arr.push({
+            id: this.state.count,
+            tab: <TradeoffResearch getCount={this.getCount} data = {[]}
+                    delete={this.delete} count={this.state.count}
+                    handleChange={this.handleChange} 
+                    files={this.state.files} saveFile={this.saveFile}
+                    key={this.state.count.toString()}/>
+          })
+          break;
       default:
         arr = <div>Unknown Element</div>
     };
@@ -383,6 +461,10 @@ class TabList extends Component {
             index[exptItem["normal-curve-question-key"] + "." + exptItem["normal-curve-legend-key2"]] = exptItem["graph2key"];
           case "threshold":
             index[exptItem["threshold-key"]] = exptItem["Question"];
+          case "tradeoff":
+            index[exptItem["tradeoff-key"]] = exptItem["Question"];
+          case "tradeoffthree":
+            index[exptItem["tradeoff-key"]] = exptItem["Question"];
         }
       });
     // var validName = this.nameRef.current.value.length > 0;

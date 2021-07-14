@@ -1,1091 +1,699 @@
 import React, { Component } from 'react';
-import './HistSlider.css';
+import './ThresholdSlider.css';
+import Dropzone, { useDropzone } from "react-dropzone";
+import { gsap } from 'gsap'
+import {TweenMax, Draggable} from "gsap/all";
 
-class TradeoffThree extends Component {
+import { json } from 'd3';
+import { Tween } from 'gsap/gsap-core';
 
+// --------- TODO ----------
+// set up bottom slider
+// record positions such that the 4 boxes move accordingly
+// calculate snap positions in python code
+// add more fields for researchers (legend names, question, ...)
+// set up dataflow (save researcher configuration to database)
+// add component to participant app (pull researcher config from database)
+// for now threshold requires drag and drop, will be nice if it follows the same
+// format as normal curve (give researchers 3 options to select from and then
+// further configure)
+
+class ThresholdCurve extends Component {
     constructor(props) {
-        super(props);
-        this.sliderRef = React.createRef();
-        this.slider2Ref = React.createRef();
-        this.threeGraphRef = React.createRef();
-        this.rectRef = React.createRef();
-        this.svgRef = React.createRef();
-        this.graphColRef=React.createRef();
-        this.refLine1Ref = React.createRef();
-        this.refLine2Ref = React.createRef();
-        this.changeJSON = this.changeJSON.bind(this);
-        this.handleChange = this.handleChange.bind(this);
+      super(props);
+  
+      this.sliderRef = React.createRef();
+      this.slider2Ref = React.createRef();
+      this.rectRef = React.createRef();
+      this.svgRef = React.createRef();
+      this.areaRef = React.createRef();
+      this.lengthRef = React.createRef();
+      this.graph1keyRef = React.createRef();
+      this.graph2keyRef = React.createRef();
+      this.qRef = React.createRef();
+      this.colNumValRef = React.createRef();
+      this.radRef = React.createRef();
+      this.ticksRef = React.createRef();
+      this.checkBoxRef = React.createRef();
+      this.toggleTriRef1 = React.createRef();
+      this.toggleTriRef2 = React.createRef();
+      this.questionKeyRef = React.createRef();
+      this.legendKey1Ref = React.createRef();
+      this.legendKey2Ref = React.createRef();
+      this.stroke1Ref = React.createRef();
+      this.stroke2Ref = React.createRef();
+      this.stroke3Ref = React.createRef();
+      this.stroke4Ref = React.createRef();
+      this.fill1Ref = React.createRef();
+      this.refText1 = React.createRef();
+      this.refText2 = React.createRef();
+      this.refText3 = React.createRef();
+      this.refText4 = React.createRef();
+      this.refText5 = React.createRef();
+      this.refText6 = React.createRef();
+      this.refText7 = React.createRef();
+      this.refText8 = React.createRef();
+      this.refText9 = React.createRef();
+      this.refText10 = React.createRef();
+      this.refText11 = React.createRef();
+      this.refText12 = React.createRef();
+      this.refLine6Ref = React.createRef();
+      this.refLine5Ref = React.createRef();
+      this.refLine7Ref = React.createRef();
+      this.refLine8Ref = React.createRef();
+      this.refLine9Ref = React.createRef();
+      this.refLine10Ref = React.createRef();
+
+      this.fill2Ref = React.createRef();
+      this.fill3Ref = React.createRef();
+      this.fill4Ref = React.createRef();
+      this.distancing = React.createRef();
+      this.distancing2 = React.createRef();
+      this.distancing3 = React.createRef();
+      this.colWidth = React.createRef();
+      this.displayVal1 = React.createRef();
+      this.displayVal2 = React.createRef();
+      this.rect1Width = React.createRef();
+      this.rectHeight = React.createRef();
+      this.rect2Width = React.createRef();
+
+      //this.dotReturn = this.dotReturn.bind(this); 
+      this.onChange1 = this.onChange1.bind(this);
+      this.line1 = this.line1.bind(this);
+      this.line2 = this.line2.bind(this);
+      this.line3 = this.line3.bind(this);
+      this.onChange2 = this.onChange2.bind(this);
+      this.onChange4 = this.onChange4.bind(this);
+      this.onChange5 = this.onChange5.bind(this);
+
+      this.onChange6 = this.onChange6.bind(this);
+
+      this.onChange7 = this.onChange7.bind(this);
+
+      this.onChange8 = this.onChange8.bind(this);
+      this.onChange11 = this.onChange11.bind(this);
+      this.onChange12 = this.onChange12.bind(this);
 
 
-        this.refLine4Ref = React.createRef();
-        this.refLine3Ref = React.createRef();
-        this.refLine6Ref = React.createRef();
-        this.onUpdateShapes = this.onUpdateShapes.bind(this);
-        this.arg1ref = React.createRef();
-        this.arg2ref = React.createRef();
-        this.arg3ref = React.createRef();
-        this.arg4ref = React.createRef();
-        this.arg5ref = React.createRef();
-        this.arg6ref = React.createRef();
-        this.arg7ref = React.createRef();
-        this.arg8ref = React.createRef();
-        this.arg9ref = React.createRef();
-        this.arg10ref = React.createRef();
-        this.arg11ref = React.createRef();
-        this.arg12ref = React.createRef();
 
-        this.refLine5Ref = React.createRef();
-        this.refLine7Ref = React.createRef();
-        this.refLine8Ref = React.createRef();
+      //this.svgColReturn = this.svgColReturn.bind(this);
+      //this.svgColReturn = this.svgColReturn.bind(this);
+      this.dotReturn1 = this.dotReturn1.bind(this);
+      this.dotReturn2= this.dotReturn2.bind(this);
+      this.dotReturn3= this.dotReturn3.bind(this);
+      this.dotReturn4= this.dotReturn4.bind(this);
+      this.rectReturn1 = this.rectReturn1.bind(this);
+      this.rectReturn2 = this.rectReturn2.bind(this);
+      this.rectReturn3 = this.rectReturn3.bind(this);
+      this.rectReturn4 = this.rectReturn4.bind(this);
+      this.rectReturn5 = this.rectReturn5.bind(this);
+      this.rectReturn6 = this.rectReturn6.bind(this);
+      this.rectReturn7 = this.rectReturn7.bind(this);
+      this.rectReturn8 = this.rectReturn8.bind(this);
+      this.textReturn = this.textReturn.bind(this);
+      this.textReturn2 = this.textReturn2.bind(this);
+      
 
-        this.stroke1Ref = React.createRef();
-        this.areaRef = React.createRef();
-        this.onChange2 = this.onChange2.bind(this);
-        this.rectReturn1 = this.rectReturn1.bind(this);
-        this.rectReturn2 = this.rectReturn2.bind(this);
-        this.rectReturn3 = this.rectReturn3.bind(this);
-        this.rectReturn4 = this.rectReturn4.bind(this);
-        this.rectReturn5 = this.rectReturn5.bind(this);
-        this.rectReturn6 = this.rectReturn6.bind(this);
-        this.textReturn1 = this.textReturn1.bind(this);
-        this.changeGraphColNumber = this.changeGraphColNumber.bind(this);
-        this.line1 = this.line1.bind(this);
-        this.changeGraphNumber = this.changeGraphNumber.bind(this);
-        this.changeStroke1=this.changeStroke1.bind(this);
 
-        this.establishStateData = this.establishStateData.bind(this);
-        this.state = this.establishStateData(this.props.data);
-        this.onChange1 = this.onChange1.bind(this);
+      this.establishStateData = this.establishStateData.bind(this);
+      //this.updateRadius = this.updateRadius.bind(this);
+      //this.changeColor1 = this.changeColor1.bind(this);
+      //this.changeColor2 = this.changeColor2.bind(this);
+      this.changeJSON = this.changeJSON.bind(this);
+      //this.onUpdateShapes = this.onUpdateShapes.bind(this);
+      //this.onFinishShapes = this.onFinishShapes.bind(this);   
+      this.state = this.establishStateData(this.props.data);
     }
 
-    establishStateData(data){
-        return{
-            stroke1 : "#FF0000",
-            stroke2 : "#0000FF",
-            stroke3: "#ffc40c",
-            rect1Height : 100,
-            rect2Height : 100,
-            rect3Height : 100,
-            rect4Height: 100,
-            rect5Height:100,
-            rect6Height:100,
-            rect7Height:100,
-            rect8Height:100,
-            rectWidth : 40,
-            sliderPos:1,
-            sliderPos2:1,
-            questionText:"",
-            rect1Arr: [0.76,0.76, 0.68, 0.65, 0.63, 0.62, 0.60, 0.59, 0.58, 0.57, 0.56, 0.56, 0.55, 0.54, 0.54, 0.53, 0.53, 0.52, 0.52, 0.52, 0.51, 0.51, 0.509 ,0.506, 0.503, 0.50],
-            rect2Arr: [0.399528104378295,
-              0.419528104378295,
-              0.436856783892294,
-              0.446993411594998,
-              0.454185463406292,
-              0.459764052189148,
-              0.464322091108996,
-              0.468175858104678,
-              0.471514142920291,
-              0.4744587188117,
-              0.477092731703146,
-              0.479475486198254,
-              0.481650770622995,
-              0.483651838314833,
-              0.485504537618676,
-              0.48722935940585,
-              0.48884282243429,
-              0.4903584379797,
-              0.491787398325699,
-              0.493139078857456,
-              0.494421411217145,
-              0.495641165321381,
-              0.496804165712253,
-              0.497915459776524,
-              0.498979450136994,
-              0.5],
-            rect3Arr: [0.75,
-              0.750612329917804,
-              0.751250724134086,
-              0.751917500572648,
-              0.752615300807172,
-              0.753347153269713,
-              0.754116552685526,
-              0.754927561004581,
-              0.75578493721218,
-              0.756694306539426,
-              0.75766238435649,
-              0.758697277428794,
-              0.7598088970111,
-              0.761009537626203,
-              0.762314708281047,
-              0.763744360978112,
-              0.76532476871298,
-              0.767091514247826,
-              0.769094485137193,
-              0.771406745334602,
-              0.774141568686512,
-              0.777488721956225,
-              0.781803953043001,
-              0.787885929664624,
-              0.798283137373023,
-              0.818283137373023],
-            rect4Arr: [0.75,
-              0.748775340164392,
-              0.747498551731828,
-              0.746164998854703,
-              0.744769398385657,
-              0.743305693460574,
-              0.741766894628947,
-              0.740144877990839,
-              0.73843012557564,
-              0.736611386921148,
-              0.73467523128702,
-              0.732605445142412,
-              0.7303822059778,
-              0.727980924747594,
-              0.725370583437905,
-              0.722511278043775,
-              0.719350462574041,
-              0.715816971504349,
-              0.711811029725613,
-              0.707186509330796,
-              0.701716862626977,
-              0.695022556087551,
-              0.686392093913997,
-              0.674228140670752,
-              0.653433725253954,
-              0.633433725253954],
-            rect5Arr: [0.689038170367751,
-              0.677038170367751,
-              0.638915075436954,
-              0.616614494491005,
-              0.600791980506157,
-              0.588519085183875,
-              0.578491399560208,
-              0.570013112169709,
-              0.56266888557536,
-              0.556190818614259,
-              0.550395990253079,
-              0.545153930363841,
-              0.540368304629411,
-              0.535965955707367,
-              0.531890017238912,
-              0.52809540930713,
-              0.524545790644563,
-              0.521211436444659,
-              0.518067723683462,
-              0.515094026513597,
-              0.512272895322282,
-              0.509589436292963,
-              0.507030835433044,
-              0.504585988491648,
-              0.502245209698614,
-              0.5],
-            rect6Arr: [0.75,0.750244931967122,
-              0.750500289653634,
-              0.750767000229059,
-              0.751046120322869,
-              0.751338861307885,
-              0.75164662107421,
-              0.751971024401832,
-              0.752313974884872,
-              0.75267772261577,
-              0.753064953742596,
-              0.753478910971518,
-              0.75392355880444,
-              0.754403815050481,
-              0.754925883312419,
-              0.755497744391245,
-              0.756129907485192,
-              0.75683660569913,
-              0.757637794054877,
-              0.758562698133841,
-              0.759656627474605,
-              0.76099548878249,
-              0.762721581217201,
-              0.76515437186585,
-              0.769313254949209,
-              0.781313254949209, 
-              ],
-            rect7Arr: [0.4,0.8],
-            rect8Arr: [0.2,0.3],
-            line1Height:0.4,
-            line2Height:0.5,
-            line3Height:0.4,
-            line4Height:0.2,
-            line5Height:0.4,
-            line6Height:0.3,
-            line7Height:0.2,
-            line8Height:0.1,
-            threeGraphs: false,
-            threeGraphOne: true,
-            fourGraphOne: true,
-            graphOneLabel:"",
-            graphTwoLabel:"",
-            graphThreeLabel:"",
-            graphFourlabel:"",
-            sliderLabelLeft:"",
-            sliderLabelRight:"",
-            jsonData: data
-
-        }
-    }
-    twographLine(xPos1,xPos2,height){
-      var hard = <line x1 = {300 + xPos1} x2 = {300 + xPos2} y1 = {450 + 200*height - 200*0.01} y2 = {450 + 200*height - 200*0.01} stroke = "#000000"></line>;
-      return hard;
-    }
-    bottomGraphLine(xPos1, xPos2, height){
-      var hard = <line x1 = {xPos1 + 300} x2 = {300 + xPos2} y1 = {150 + 200*height + 200*0.05} y2 = {150 + 200*height + 200*0.05} stroke = "#000000"></line>;
-      return hard;
-    }
-    changeGraphColNumber(){
-      const newColor = this.graphColRef.current.value;
-      if (newColor === "1 and 1"){
-          this.setState({fourGraphOne: true});
-          this.setState({threeGraphOne: true});
-      }
-      if (newColor === "1 and 2"){
-          this.setState({fourGraphOne: true});
-          this.setState({threeGraphOne: false});
-      }
-      if (newColor === "2 and 1"){
-          this.setState({fourGraphOne: false});
-          this.setState({threeGraphOne: true});
-      }
-      if (newColor === "2 and 2"){
-          this.setState({fourGraphOne: false});
-          this.setState({threeGraphOne: false});
-      }
-  }
-  handleChange(key, value, count) {
-    this.props.handleChange(key, value, count);
-  }
-   changeJSON(key, value, data) {
+    changeJSON(key, value, data) {
       // var data = this.state.jsonData;
       data[key] = value;
-      this.handleChange("FileContent", data, this.props.count);
-    }
-    onUpdateShapes(){
-      this.setState({questionText : this.arg5ref.current.value})
-      this.setState({boldQuestionText : this.arg12ref.current.value})
-      this.setState({graphOneLabel : this.arg1ref.current.value})
-      this.setState({graphTwoLabel : this.arg2ref.current.value})
-      this.setState({sliderLabelLeft : this.arg3ref.current.value})
-      this.setState({sliderLabelRight : this.arg4ref.current.value})
-      this.setState({graphThreeLabel : this.arg6ref.current.value})
-      this.setState({graphFourlabel : this.arg7ref.current.value})
-      this.setState({legend1 : this.arg8ref.current.value})
-      this.setState({legend2 : this.arg9ref.current.value})
-      this.setState({legend3 : this.arg10ref.current.value})
-      this.setState({legend4 : this.arg11ref.current.value})
-      this.changeJSON("questionText", this.state.questionText, this.state.jsonData)
-      this.changeJSON("boldQuestionText", this.state.boldQuestionText, this.state.jsonData)
-      this.changeJSON("graphOneLabel", this.state.graphOneLabel, this.state.jsonData)
-      this.changeJSON("graphTwoLabel", this.state.graphTwoLabel, this.state.jsonData)
-      this.changeJSON("sliderLabelLeft", this.state.sliderLabelLeft, this.state.jsonData)
-      this.changeJSON("sliderLabelRight", this.state.sliderLabelRight, this.state.jsonData)
-      this.changeJSON("graphThreeLabel", this.state.questionText, this.state.jsonData)
-      this.changeJSON("graphFourLabel", this.state.questionText, this.state.jsonData)
-      this.changeJSON("legend2", this.state.questionText, this.state.jsonData)
-      this.changeJSON("legend1", this.state.questionText, this.state.jsonData)
-      this.changeJSON("legend3", this.state.questionText, this.state.jsonData)
-      this.changeJSON("legend4", this.state.questionText, this.state.jsonData)
-
-    }
-    onChange1(e){
-        this.setState({ [e.target.name]: e.target.value })
-        this.setState({rect1Height :200*this.state.rect1Arr[e.target.value]})
-        this.setState({rect2Height :200*this.state.rect2Arr[e.target.value]})
-        this.setState({rect3Height :200*this.state.rect3Arr[e.target.value]})
-        this.setState({rect4Height :200*this.state.rect4Arr[e.target.value]})
-        this.setState({rect5Height :200*this.state.rect5Arr[e.target.value]})
-        this.setState({rect6Height :200*this.state.rect6Arr[e.target.value]})
-        this.setState({rect7Height :200*this.state.rect7Arr[e.target.value]})
-        this.setState({rect8Height :200*this.state.rect8Arr[e.target.value]})
     }
 
-
-    onChange10(e){
-      this.setState({line1Height:e})
-      this.changeJson("line1height", this.state.line1Height, this.state.jsonData)
+    handleChange(key, value, count) {
+      this.props.handleChange(key, value, count);
     }
-    onChange2(e){
-      this.setState({line2Height:e})
-      this.changeJson("line2height", this.state.line2Height, this.state.jsonData)
 
+    onChange4(q) {
+      this.setState({rect3Width : q})
     }
-    onChange3(e){
-      this.setState({line3Height:e})
-      this.changeJson("line3height", this.state.line3Height, this.state.jsonData)
 
+    onChange1(e) {
+      this.setState({ [e.target.name]: e.target.value })
+      this.setState({rect1Width : 400*this.state.displayArr1[e.target.value-1]})
+      this.setState({rect2Width: 400*this.state.displayArr2[e.target.value-1]})
     }
-    onChange4(e){
-      this.setState({line4Height:e})
-      this.changeJson("line4height", this.state.line4Height, this.state.jsonData)
-
+    onChange2(e) {
+      this.setState({rect4Width: 400*this.state.displayArr4[e.target.value-1]})
+      this.setState({rect3Width: 400*this.state.displayArr3[e.target.value-1]})
+      this.setState({ [e.target.name]: e.target.value })
     }
-    onChange5(e){
-      this.setState({line5Height:e})
-      this.changeJson("line5height", this.state.line5Height, this.state.jsonData)
-
+    line1(xPos1,xPos2,yPos1,yPos2){
+      var hard = <line x1 = {xPos1} x2 = {xPos2} y1 = {yPos1} y2 = {yPos2} stroke = "#000000"></line>;
+      return hard;
     }
-    onChange6(e){
-      this.setState({line6Height:e})
-      this.changeJson("line6height", this.state.line6Height, this.state.jsonData)
-
+    line2(xPos1,xPos2,yPos1,yPos2){
+      var dottedLine = [];
+      for(var i = 0; i < yPos2 - yPos1; i+=4){
+        var hard = <line x1 = {xPos1} x2 = {xPos1} y1 = {yPos1 + i} y2 = {yPos2 + i + 2} stroke = "#808080"></line>;
+        dottedLine.push(hard);
+      }
+      return dottedLine;
     }
-    onChange7(e){
-      this.setState({line7Height:e})
-      this.changeJson("line7height", this.state.line7Height, this.state.jsonData)
 
+    line3(xPos1,xPos2,yPos1,yPos2){
+      var hard = <line x1 = {this.state.placement1} x2 = {this.state.placement1} y1 = {yPos1} y2 = {yPos2} stroke = "#808080"   strokeWidth="2"></line>;
+      return hard;
     }
-    onChange8(e){
-      this.setState({line8Height:e})
-      this.changeJson("line8height", this.state.line8Height, this.state.jsonData)
-
+    line4(xPos1,xPos2,yPos1,yPos2){
+      var hard = <line x1 = {this.state.placement2} x2 = {this.state.placement2} y1 = {yPos1} y2 = {yPos2} stroke = "#808080"   strokeWidth="2"  stroke-dasharray = "4"></line>;
+      return hard;
+    }
+    line5(xPos1,xPos2,yPos1,yPos2){
+      var hard = <line x1 = {this.state.placement3} x2 = {this.state.placement3} y1 = {yPos1} y2 = {yPos2} stroke = "#808080"   strokeWidth="2"></line>;
+      return hard;
+    }
+    line6(xPos1,xPos2,yPos1,yPos2){
+      var hard = <line x1 = {this.state.placement4} x2 = {this.state.placement4} y1 = {yPos1} y2 = {yPos2} stroke = "#808080"   strokeWidth="2" stroke-dasharray = "4"></line>;
+      return hard;
     }
 
     changeStroke1() {
       const newColor = this.stroke1Ref.current.value;
-      if (newColor === "RBY"){
-        this.setState({stroke1:"#FF0000"});
-        this.setState({stroke2:"#0000FF"});
-        this.setState({stroke3:"#ffc40c"});
-        this.changeJSON("stroke1", this.state.stroke1, this.state.jsonData);
-        this.changeJSON("stroke2", this.state.stroke2, this.state.jsonData);
-        this.changeJSON("stroke3", this.state.stroke3, this.state.jsonData)
-
+      if (newColor === "#FF0000"){
+        this.setState({stroke3: "#0000FF"});
+        this.setState({stroke4: "#0000FF"});
+        this.setState({fill4:"#0000FF"});
+        this.setState({ stroke1 : newColor });
+        this.setState({stroke2: newColor});
+        this.setState({fill2:newColor});
       }
-      if (newColor === "RYB"){      
-        this.setState({stroke1: "#FF0000"});
-        this.setState({stroke2:"#ffc40c"});
-        this.setState({stroke3:"#0000FF"});
-        this.changeJSON("stroke1", this.state.stroke1, this.state.jsonData);
-        this.changeJSON("stroke2", this.state.stroke2, this.state.jsonData);
-        this.changeJSON("stroke3", this.state.stroke3, this.state.jsonData)
+      if (newColor === "#0000FF"){
+        this.setState({stroke3: "#FF0000"});
+        this.setState({stroke4: "#FF0000"});        
+        this.setState({fill4: "#FF0000"});
+        this.setState({stroke1 : newColor });
+        this.setState({stroke2: newColor});
+        this.setState({fill2:newColor});
       }
-      if (newColor === "BYR"){
-        this.setState({stroke1:"#0000FF"});
-        this.setState({stroke2:"#ffc40c"});
-        this.setState({stroke3:"#FF0000"});
-        this.changeJSON("stroke1", this.state.stroke1, this.state.jsonData);
-        this.changeJSON("stroke2", this.state.stroke2, this.state.jsonData);
-        this.changeJSON("stroke3", this.state.stroke3, this.state.jsonData)
-
-      }      
-      if (newColor === "BRY"){
-        this.setState({stroke1:"#0000FF"});
-        this.setState({stroke2:"#FF0000"});
-        this.setState({stroke3:"#ffc40c"});
-        this.changeJSON("stroke1", this.state.stroke1, this.state.jsonData);
-        this.changeJSON("stroke2", this.state.stroke2, this.state.jsonData);
-        this.changeJSON("stroke3", this.state.stroke3, this.state.jsonData)
-
+      if(newColor === "Orange and Blue"){
+        this.setState({stroke3: "#0000FF"});
+        this.setState({stroke4: "#0000FF"});
+        this.setState({fill4:"#0000FF"});
+        this.setState({stroke1: "#ffa500"});
+        this.setState({stroke2: "#ffa500"});
+        this.setState({fill2: "#ffa500"});
       }
-      if (newColor === "YRB"){
-        this.setState({stroke1:"#ffc40c"});
-        this.setState({stroke2:"#FF0000"});
-        this.setState({stroke3:"0000FF"});
-        this.changeJSON("stroke1", this.state.stroke1, this.state.jsonData);
-        this.changeJSON("stroke2", this.state.stroke2, this.state.jsonData);
-        this.changeJSON("stroke3", this.state.stroke3, this.state.jsonData)
-
+      if(newColor === "Blue and Orange"){
+        this.setState({stroke1: "#0000FF"});
+        this.setState({stroke2: "#0000FF"});
+        this.setState({fill2:"#0000FF"});
+        this.setState({stroke3: "#ffa500"});
+        this.setState({stroke4: "#ffa500"});
+        this.setState({fill4: "#ffa500"});
       }
-      if (newColor === "YBR"){
-        this.setState({stroke1:"#ffc40c"});
-        this.setState({stroke2:"#0000FF"});
-        this.setState({stroke3:"#FF0000"});
-        this.changeJSON("stroke1", this.state.stroke1, this.state.jsonData);
-        this.changeJSON("stroke2", this.state.stroke2, this.state.jsonData);
-        this.changeJSON("stroke3", this.state.stroke3, this.state.jsonData)
-
+      if(newColor === "Blue and Yellow"){
+        this.setState({stroke1: "#0000FF"});
+        this.setState({stroke2: "#0000FF"});
+        this.setState({fill2:"#0000FF"});
+        this.setState({stroke3: "#FFD300"});
+        this.setState({stroke4: "#FFD300"});
+        this.setState({fill4: "#FFD300"});
       }
+      if(newColor === "Yellow and Blue"){
+        this.setState({stroke3: "#0000FF"});
+        this.setState({stroke4: "#0000FF"});
+        this.setState({fill4:"#0000FF"});
+        this.setState({stroke1: "#FFD300"});
+        this.setState({stroke2: "#FFD300"});
+        this.setState({fill2: "#FFD300"});
+      }
+      this.changeJSON("stroke1", this.state.stroke1,this.state.jsonData)
+      this.changeJSON("stroke2", this.state.stroke2,this.state.jsonData)
+      this.changeJSON("stroke3", this.state.stroke3,this.state.jsonData)
+      this.changeJSON("stroke4", this.state.stroke4,this.state.jsonData)
+      this.changeJSON("fill2", this.state.fill2,this.state.jsonData)
+      this.changeJSON("fill4", this.state.fill4,this.state.jsonData)
+      this.handleChange('FileContent', this.state.jsonData, 0)
+
+    }
+    onChange5(e){
+      this.setState({placement1:e})
+      this.changeJSON("placement1",e,this.state.jsonData)
+      this.handleChange('FileContent', this.state.jsonData, 0)
+
+    }
+    onChange6(e){
+      this.setState({placement2:e})
+      this.changeJSON("placement2",e,this.state.jsonData)
+      this.handleChange('FileContent', this.state.jsonData, 0)
+
+    }
+    onChange7(e){
+      this.setState({placement3:e})
+      this.changeJSON("placement3",e,this.state.jsonData)
+      this.handleChange('FileContent', this.state.jsonData, 0)
+
+    }
+    onChange8(e){
+      this.setState({placement4:e})
+      this.changeJSON("placement4",e,this.state.jsonData)
+      this.handleChange('FileContent', this.state.jsonData, 0)
+
+    }
+    onChange9(){
+      this.setState({label1:this.refText1.current.value});
+      this.setState({label2:this.refText2.current.value});
+      this.setState({label3:this.refText3.current.value});
+      this.setState({label4:this.refText4.current.value});
+      this.changeJSON("label1", this.refText1.current.value, this.state.jsonData);
+      this.changeJSON("label2", this.refText2.current.value, this.state.jsonData);
+      this.changeJSON("label3", this.refText3.current.value, this.state.jsonData);
+      this.changeJSON("label4", this.refText4.current.value, this.state.jsonData);
+      this.handleChange('FileContent', this.state.jsonData, 0)
+;
+    }
+    onChange11(){
+      this.setState({legendKey0:this.refText5.current.value});
+      this.setState({legendKey1:this.refText6.current.value});
+      this.setState({legendKey2:this.refText7.current.value});
+      this.setState({legendKey3:this.refText8.current.value});
+      this.changeJSON("legendKey0", this.refText5.current.value, this.state.jsonData);
+      this.changeJSON("legendKey1", this.refText6.current.value, this.state.jsonData);
+      this.changeJSON("legendKey2", this.refText5.current.value, this.state.jsonData);
+      this.changeJSON("legendKey3", this.refText8.current.value, this.state.jsonData);
+      this.handleChange('FileContent', this.state.jsonData, 0)
 
 
     }
-    changeGraphNumber(){
-      const newGraph = this.threeGraphRef.current.value;
-      if (newGraph === "True"){
-        this.setState({threeGraphs: true});
-        this.changeJSON("threeGraphs", this.state.threeGraphs, this.state.jsonData);
+    onChange12(){
+      this.setState({legend1:this.refText9.current.value});
+      this.setState({legend2:this.refText10.current.value});
+      this.setState({legend3:this.refText11.current.value});
+      this.setState({legend4:this.refText12.current.value});
+      this.changeJSON("legend1", this.refText9.current.value, this.state.jsonData);
+      this.changeJSON("legend2", this.refText10.current.value, this.state.jsonData);
+      this.changeJSON("legend3", this.refText11.current.value, this.state.jsonData);
+      this.changeJSON("legend4", this.refText12.current.value, this.state.jsonData);
+      this.handleChange('FileContent', this.state.jsonData, 0)
+
+
+
+    }
+
+    establishStateData(data) {
+      // console.log("establishStateData()", new Date());
+  
+      return{
+        //arr1: data["displayArr1"],
+        // arr2: data["displayArr2"],
+        // arr3: data["displayArr3"],
+        //arr4: data["displayArr4"],
+        jsonData: data,
+        xPos1: data["xPos1"],
+        yPos1: data["yPos1"],
+        xPos2: data["xPos2"],
+        yPos2: data["yPos2"],
+        xPos3: data["xPos3"],
+        yPos3: data["yPos3"],
+        xPos4: data["xPos4"],
+        yPos4: data["yPos4"],
+        placement1:200,
+        placement2:300,
+        placement3:500,
+        placement4:800,
+        stroke1: "#FF0000",
+        stroke2: "#FF0000",
+        stroke3: "#0000FF",
+        stroke4: "#0000FF",
+        fill1: "#FF0000",
+        fill2: "none",
+        fill3: "#0000FF",
+        fill4: "none",
+        height: 1000,
+        width: 1000,
+        rad: data["circRad"],
+        minVal:1,
+        sliderPos:8,
+        sliderPos2:5,
+        rect1Width: 100,
+        rect2Width: 100,
+        rect3Width: 100,
+        rect4Width: 100,
+        rectHeight:20,
+        displayArr1 : data["displayArr1"],
+        displayArr2 : data["displayArr2"],
+        displayArr3 : data["displayArr3"],
+        displayArr4 : data["displayArr4"],
+        displayVal1: 2,
+        displayVal2: 1,
+        maxVal : 11,
+        label1 : "",
+        label2 : "",
+        label3 : "",
+        label4 : "",
+        thumbDown: false,
+        topSliderX: 0,
+        topSliderY: 60,
+        bottomSliderX: 90,
+        bottomSliderY: 175,
+        dragger1Pos: 0,
+        dragger2Pos: 0,
+        legendKey0: "",
+        legendKey1: "",
+        legendKey2: "",
+        legendKey3: "",
+        legend1: "",
+        legend2: "",
+        legend3: "",
+        legend4 : ""
       }
-      else{
-        this.setState({threeGraphs: false});
-        this.changeJSON("threeGraphs", this.state.threeGraphs, this.state.jsonData);
-      }
+    }
+
+dotReturn1(xPos, yPos) {
+    var hard = 
+    <circle 
+    // onMouseEnter={e => this.displayTag1(e)}
+    // onMouseLeave={e => this.hideTag1(e)}
+    // onMouseMove={e => this.updateTag1(e)} 
+    className="icon" 
+    stroke={this.state.stroke1} 
+    fill={this.state.fill1}
+    fillOpacity="1" 
+    strokeOpacity="1" cx={xPos} cy={yPos} r={this.state.rad}>
+    </circle>;
+
+    return hard;
   }
 
-    rectReturn1(xPos, yPos){
-        var hard = 
-        <rect
-        x = {xPos} y = {yPos} stroke = {"#000000"} fill = {this.state.stroke1} height = {this.state.rect1Height} width = {this.state.rectWidth} fillOpacity = "0.7" strokeOpacity = "0.7"></rect>;
-        return hard;
-      }
-      rectReturn2(xPos, yPos){
-        var hard = 
-        <rect
-        x = {xPos} y = {yPos} stroke = {"#000000"} fill = {this.state.stroke2} height = {this.state.rect2Height} width = {this.state.rectWidth} fillOpacity = "0.7" strokeOpacity = "0.7"></rect>;
-        return hard;
-      }
-      rectReturn3(xPos, yPos){
-        var hard = 
-        <rect
-        x = {xPos} y = {yPos} stroke = {"#000000"} fill = {this.state.stroke1} height = {this.state.rect3Height} width = {this.state.rectWidth} fillOpacity = "0.7" strokeOpacity = "0.7"></rect>;
-        return hard;
-      }
-      rectReturn4(xPos, yPos){
-        var hard = 
-        <rect
-        x = {xPos} y = {yPos} stroke = {"#000000"} fill = {this.state.stroke2} height = {this.state.rect4Height} width = {this.state.rectWidth} fillOpacity = "0.7" strokeOpacity = "0.7"></rect>;
-        return hard;
-      }
-      rectReturn5(xPos, yPos){
-        var hard = 
-        <rect
-        x = {xPos} y = {yPos} stroke = {"#000000"} fill = {this.state.stroke1} height = {this.state.rect5Height} width = {this.state.rectWidth} fillOpacity = "0.7" strokeOpacity = "0.7"></rect>;
-        return hard;
-      }
-      rectReturn6(xPos, yPos){
-        var hard = 
-        <rect
-        x = {xPos} y = {yPos} stroke = {"#000000"} fill = {this.state.stroke2} height = {this.state.rect6Height} width = {this.state.rectWidth} fillOpacity = "0.7" strokeOpacity = "0.7"></rect>;
-        return hard;
-      }
-      rectReturn7(xPos, yPos){
-        var hard = 
-        <rect
-        x = {xPos} y = {yPos} stroke = {"#000000"} fill = {this.state.stroke1} height = {this.state.rect7Height} width = {this.state.rectWidth} fillOpacity = "0.7" strokeOpacity = "0.7"></rect>;
-        return hard;
-      }
-      rectReturn8(xPos, yPos){
-        var hard = 
-        <rect
-        x = {xPos} y = {yPos} stroke = {"#000000"} fill = {this.state.stroke2} height = {this.state.rect8Height} width = {this.state.rectWidth} fillOpacity = "0.7" strokeOpacity = "0.7"></rect>;
-        return hard;
-      }
-      rectReturn9(xPos, yPos){
-        var hard = 
-        <rect
-        x = {xPos} y = {yPos} stroke = {"#000000"} fill = {this.state.stroke3} height = {this.state.rect5Height} width = {this.state.rectWidth} fillOpacity = "0.7" strokeOpacity = "0.7"></rect>;
-        return hard;
-      }
-      rectReturn10(xPos, yPos){
-        var hard = 
-        <rect
-        x = {xPos} y = {yPos} stroke = {"#000000"} fill = {this.state.stroke3} height = {this.state.rect6Height} width = {this.state.rectWidth} fillOpacity = "0.7" strokeOpacity = "0.7"></rect>;
-        return hard;
-      }
-      line1(xPos1,xPos2,yPos1,yPos2){
-        var hard = 
-        <line x1 = {xPos1 + 300} x2 = {300 + xPos2} y1 = {yPos1} y2 = {yPos2} stroke = "#000000"></line>;
-        return hard;
-      }
-      line2(xPos1,xPos2,yPos1,yPos2){
-        var hard = 
-        <line x1 = {xPos1 + 300} x2 = {300 + xPos2} y1 = {yPos1} y2 = {yPos2} stroke = "#808080"></line>;
-        return hard;
-      }
-      textReturn1(xPos, yPos, tedxt){
-        var hard = <text x = {xPos} y = {yPos}>{tedxt}</text>;
-        return hard;
-      }
-    render(){
-      const threeGraphs = this.state.threeGraphs;
-        return (
-            <div>
-                <svg width = {1400} height = {1000} style={{}} class = "b"> 
-                    {this.rectReturn1(500,450)}
-                    {this.rectReturn2(580,450)}
-                    {this.rectReturn3(900,450)}
-                    {this.rectReturn4(980,450)}
-                    {this.line1(173,187,650,650)}
-                    {this.line1(173,187,488,488)}
-                    {this.line1(173,187,528,528)}
-                    {this.line1(173,187,568,568)}
-                    {this.line1(173,187,608,608)}
-
-                    {this.line1(176,184,633,633)}
-                    {this.line1(176,184,468,468)}
-                    {this.line1(176,184,508,508)}
-                    {this.line1(176,184,548,548)}
-                    {this.line1(176,184,588,588)}
-                    {this.line1(173,187,488,488)}
-                    {this.line1(173,187,528,528)}
-                    {this.line1(173,187,568,568)}
-                    {this.line1(173,187,608,608)}
-
-                    {this.line1(176,184,633,633)}
-                    {this.line1(176,184,468,468)}
-                    {this.line1(176,184,508,508)}
-                    {this.line1(176,184,548,548)}
-                    {this.line1(176,184,588,588)}
-                    {this.twographLine(195,245,this.state.line1Height)}
-                    {this.twographLine(275,325,this.state.line2Height)}
-                    {this.twographLine(595,645,this.state.line3Height)}
-                    {this.twographLine(675,725,this.state.line4Height)}
-                    {
-                    threeGraphs
-                    ? this.bottomGraphLine(480,430,this.state.line6Height)
-
-                    : [(
-                      this.state.fourGraphOne
-                      ?this.bottomGraphLine(230,280,this.state.line6Height)
-                      : this.bottomGraphLine(595,645,this.state.line7Height)
-                    )]
-                  }
-                  {
-                    threeGraphs
-                    ? this.bottomGraphLine(355,405,this.state.line5Height)
-
-                    : [(
-                      this.state.fourGraphOne
-                      ? this.bottomGraphLine(635,685,this.state.line6Height)
-                      : this.bottomGraphLine(675,725,this.state.line8Height)
-                    )]
-                  }
-                  {
-                    threeGraphs
-                    ? this.bottomGraphLine(480,430,this.state.line6Height)
-
-                    : [(
-                      this.state.threeGraphOne
-                      ? <text></text>
-                      : this.bottomGraphLine(275,325,this.state.line6Height)
-                    )]
-                  }
-                  {
-                    threeGraphs
-                    ? this.bottomGraphLine(355,405,this.state.line5Height)
-
-                    : [(
-                      this.state.threeGraphOne
-                      ? <text></text>
-                      : this.bottomGraphLine(195,245,this.state.line5Height)
-                    )]
-                  }
-
-                    {
-                    threeGraphs
-                    ? this.line1(330,330,160,360)
-
-
-                    : this.line1(576,584,218,218)
-                  }
-                  {
-                    threeGraphs
-                    ? this.line1(330,330,258,258)
-
-
-                    : this.line1(576,584,298,298)
-                  }
-                  {
-                    threeGraphs
-                    ? this.line1(326,334,298,298)
-
-
-                    : this.line1(576,584,337,337)
-                  }
-                  {
-                    threeGraphs
-                    ? this.line1(326,334,338,338)
-
-
-                    : this.line1(573,587,360,360)
-                  }
-
-                  {
-                    threeGraphs
-                    ? this.line1(326,334,218,218)
-
-
-                    : this.line1(176,184,218,218)
-                  }
-                  
-                  {
-                    threeGraphs
-                    ? this.line1(326,334,258,258)
-
-
-                    : this.line1(176,184,258,258)
-                  }
-
-                  {
-                    threeGraphs
-                    ? this.line1(326,334,178,178)
-
-
-                    : this.line1(576,584,258,258)
-                  }
-
-
-
-
-                  {
-                    threeGraphs
-                    ? this.line1(330,330,160,360)
-
-
-                    : this.line1(573,587,198,198)
-                  }
-                  {
-                    threeGraphs
-                    ? this.line1(323,337,238,238)
-
-
-                    : this.line1(573,587,238,238)
-                  }
-                  {
-                    threeGraphs
-                    ? this.line1(323,337,278,278)
-
-
-                    : this.line1(573,587,278,278)
-                  }
-                  {
-                    threeGraphs
-                    ? this.line1(323,337,318,318)
-
-
-                    : this.line1(573,587,318,318)
-                  }
-
-                  {
-                    threeGraphs
-                    ? this.line1(323,337,360,360)
-
-
-                    : this.line1(176,184,218,218)
-                  }
-
-
-                   {
-                    threeGraphs
-                    ? this.line1(323,337,198,198)
-
-
-                    : this.line1(173,187,198,198)
-                  }
-                  {
-                    threeGraphs
-                    ? this.line1(330,330,258,258)
-
-
-                    : this.line1(173,187,238,238)
-                  }
-                  {
-                    threeGraphs
-                    ? this.line1(330,330,160,360)
-
-
-                    : this.line1(173,187,278,278)
-                  }
-                  {
-                    threeGraphs
-                    ? this.line1(330,330,160,360)
-
-
-                    : this.line1(173,187,318,318)
-                  }
-
-                  {
-                    threeGraphs
-                    ? this.line1(330,330,160,360)
-
-
-                    : this.line1(176,184,218,218)
-                  }
-
-
-
-
-
-
-
-
-
-
-
-                  {
-                    threeGraphs
-                    ? this.line1(330,330,255,258)
-
-
-                    : this.line1(176,184,298,298)
-                  }
-                  {
-                    threeGraphs
-                    ? this.line1(330,330,160,360)
-
-
-                    : this.line1(176,184,337,337)
-                  }
-                  {
-                    threeGraphs
-                    ? this.line1(330,330,160,360)
-
-
-                    : this.line1(173,187,360,360)
-                  }
-
-
-                  {
-                    threeGraphs
-                    ? this.line1(330,330,160,360)
-
-
-                    : this.line1(576,584,218,218)
-                  }
-                                    {
-                    threeGraphs
-                    ? this.line1(330,330,160,360)
-
-
-                    : this.line1(576,584,178,178)
-
-                  }
-                                    {
-                    threeGraphs
-                    ? this.line1(330,330,160,360)
-
-
-                    : this.line1(176,184,178,178)
-                  }
-
-                    {this.line1(573,587,650,650)}
-                    {this.line1(573,587,488,488)}
-                    {this.line1(573,587,528,528)}
-                    {this.line1(573,587,568,568)}
-                    {this.line1(573,587,608,608)}
-
-                    {this.line1(576,584,633,633)}
-                    {this.line1(576,584,468,468)}
-                    {this.line1(576,584,508,508)}
-                    {this.line1(576,584,548,548)}
-                    {this.line1(576,584,588,588)}
-
-
-                    {
-                      this.state.threeGraphs
-                      ? this.rectReturn5(660,160)             
-                      : [
-                          (this.state.threeGraphOne
-                          ? this.rectReturn9(535,160)
-                          : this.rectReturn5(500,160)
-                          )
-                        ]
-                    }
-                    {
-                      this.state.threeGraphs
-                      ? this.rectReturn6(735,160)         
-                      : [
-                        (this.state.threeGraphOne
-                        ? <text></text>
-                        : this.rectReturn6(580,160)
-                        )
-                      ]     
-                    }
-                    {
-                      this.state.threeGraphs
-                      ? <text> </text>        
-                      : [
-                          (this.state.fourGraphOne
-                          ? this.rectReturn10(940,160)  
-                          : this.rectReturn7(900,160)   
-                          )
-                      ] 
-                    }
-                   {
-                      this.state.threeGraphs
-                      ? <text> </text>        
-                      : [
-                          (this.state.fourGraphOne
-                          ? <text></text>
-                          : this.rectReturn8(980,160)   
-                          )
-                      ] 
-                    }
-                    {this.line1(180,180,450,650)}
-                    {this.line1(180,360,450,450)}
-                    {this.line1(580,580,450,650)}
-                    {this.line1(580,760,450,450)}
-                    {
-                    threeGraphs
-                    ? this.line1(330,330,160,360)
-
-
-                    : this.line1(180,180,160,360)
-
-                  }
-                
-                  {
-                    threeGraphs
-                    ? this.line1(330,510,160,160)
-
-                    : this.line1(180,390,160,160)
-                  }
-                  {
-                    threeGraphs
-                    ? this.line1(0,0,0,0)
-
-
-                    : this.line1(580,580,160,360)
-
-                  }
-                  {
-                    threeGraphs
-                    ? this.line1(0,0,0,0)
-
-                    : this.line1(580 ,780,160,160)
-                  }
-                                    </svg>
-                  <svg class = "e" width = {1400} height = {800}>
-                  <text x = {200} y = {15}>{this.state.questionText}</text>
-                  <text x = {200} y = {115} font-weight = "bold">{this.state.boldQuestionText}</text>
-                  <text x = {230} y = {265}>Legend:</text>
-                  <text x = {305} y = {265}>{this.state.legend1}</text>
-                  <rect x = {290} y = {255} height = {10} width = {10} stroke = {this.state.stroke1} fill = {this.state.stroke1}></rect>
-                  <text x = {415} y = {265}>{this.state.legend2}</text>
-                  <rect x = {510} y = {255} height = {10} width = {10} stroke = {this.state.stroke3} fill = {this.state.stroke3}></rect>
-                  <text x = {525} y = {265}>{this.state.legend3}</text>
-                  <text x = {675} y = {265}>{this.state.legend4}</text>
-                  <rect x = {400} y = {255} height = {10} width = {10} stroke = {this.state.stroke2} fill = {this.state.stroke2}></rect>
-                  {this.line1(330,365,265,265)}
-
-
-                  <text x = {150} y = {200}>{this.state.sliderLabelLeft}</text>
-                  <text x = {450} y = {200}>{this.state.sliderLabelRight}</text>
-                  <text x = {55} y = {510}>0</text>
-                  <text x = {50} y = {470}>20</text>
-                  <text x = {50} y = {430}>40</text>
-                  <text x = {50} y = {390}>60</text>
-                  <text x = {50} y = {350}>80</text>
-                  <text x = {45} y = {310}>100</text>
-                  <text x = {450} y = {510}>0</text>
-                  <text x = {445} y = {470}>20</text>
-                  <text x = {445} y = {430}>40</text>
-                  <text x = {445} y = {390}>60</text>
-                  <text x = {445} y = {350}>80</text>
-                  <text style = {{size:8}} x = {440} y = {310}>100</text>
-                  {
-                    threeGraphs
-                    ? <text x = {185} y = {600}>100</text>
-
-                    : <text x = {45} y = {600}>100</text>
-                  }
-                  {
-                    threeGraphs
-                    ? <text x = {190} y = {640}>80</text>
-
-                    : <text x = {50} y = {640}>80</text>
-                  }
-                  {
-                    threeGraphs
-                    ? <text x = {190} y = {680}>60</text>
-
-                    : <text x = {50} y = {680}>60</text>
-                  }
-                  {
-                    threeGraphs
-                    ? <text x = {190} y = {720}>40</text>
-
-                    : <text x = {50} y = {720}>40</text>
-                  }
-                  {
-                    threeGraphs
-                    ? <text x = {190} y = {760}>20</text>
-
-                    : <text x = {50} y = {760}>20</text>
-                  }
-                  {
-                    threeGraphs
-                    ? <text x = {190} y = {790}>0</text>
-                    : <text x = {50} y = {800}>0</text>
-                  }
-                  {
-                    threeGraphs
-                    ? <text x = {190} y = {790}> </text>
-                    : <text x = {445} y = {600}>100</text>
-                  }
-                   {
-                    threeGraphs
-                    ? <text x = {190} y = {640}></text>
-
-                    : <text x = {452} y = {640}>80</text>
-                  }
-                  {
-                    threeGraphs
-                    ? <text x = {190} y = {680}></text>
-
-                    : <text x = {452} y = {680}>60</text>
-                  }
-                  {
-                    threeGraphs
-                    ? <text x = {190} y = {720}></text>
-
-                    : <text x = {452} y = {720}>40</text>
-                  }
-                  {
-                    threeGraphs
-                    ? <text x = {190} y = {760}></text>
-
-                    : <text x = {452} y = {760}>20</text>
-                  }
-                  {
-                    threeGraphs
-                    ? <text x = {160} y = {790}> </text>
-                    : <text x = {460} y = {800}>0</text>
-                  }
-                  <text x = {200} y = {310}>{this.state.graphOneLabel}</text>
-                  <text x = {625} y = {310}>{this.state.graphTwoLabel}</text>
-                  {
-                    threeGraphs
-                    ? <text x = {380} y = {610}>{this.state.graphThreeLabel}</text>
-                    : <text x = {200} y = {610}></text>
-                  }
-                  {
-                    threeGraphs
-                    ? <text> </text>
-                    : <text x = {625} y = {610}>{this.state.graphFourlabel}</text>
-                  }
-                  <text x = {200} y = {310}></text>
-                  <text x = {625} y = {310}></text>
-                  {
-                    threeGraphs
-                    ? <text x = {380} y = {610}>{this.state.graphThreeLabel}</text>
-                    : <text x = {200} y = {610}>{this.state.graphThreeLabel}</text>
-                  }
-                  {
-                    threeGraphs
-                    ? <text> </text>
-                    : <text x = {625} y = {610}>{this.state.graphFourLabel}</text>
-                  }
-
-          </svg>
-              
-                <input type="range" min={0} max={(this.state.rect1Arr.length)-1} 
-              className="hist-slider" onChange={this.onChange1}
-              name="sliderPos" value={this.state.sliderPos} ref={this.sliderRef} list = "tickmarks"
-              style={{ width:300, left:635, top:590}}/>
-                  <br></br>
-                <div>
-                  <select name = "threeGraphs" id = "threeGraphs" ref = {this.threeGraphRef}>
-                    <option value = "False">Four graphs</option>
-                    <option value = "True">Three graphs</option>                   
-                  </select>
-                  <input onClick = {() => this.changeGraphNumber()} type = "submit" value = "Submit"></input>
-                  <br></br>
-                  <select name = "graphCol" id = "graphCol" ref = {this.graphColRef}>
-                    <option value = "1 and 1">1 and 1</option>
-                    <option value = "1 and 2">2 and 1</option>
-                    <option value = "2 and 1">1 and 2</option>
-                    <option value = "2 and 2">2 and 2</option>
-                  </select>
-                  <input onClick = {() => this.changeGraphColNumber()} type = "submit" value = "Submit"></input>
-                  <br></br>
-                  <label>Choose a color combination (starting from top left): </label>
+   dotReturn2(xPos, yPos) {
+    var hard = 
+    <circle 
+    // onMouseEnter={e => this.displayTag1(e)}
+    // onMouseLeave={e => this.hideTag1(e)}
+    // onMouseMove={e => this.updateTag1(e)} 
+    className="icon" 
+    stroke={this.state.stroke2} 
+    fill={this.state.fill2}
+    fillOpacity="1" 
+    strokeOpacity="1" cx={xPos} cy={yPos} r={this.state.rad}>
+    </circle>;
+
+    return hard;
+  }
+
+   dotReturn3(xPos, yPos) {
+
+    var hard = 
+    <circle 
+    // onMouseEnter={e => this.displayTag1(e)}
+    // onMouseLeave={e => this.hideTag1(e)}
+    // onMouseMove={e => this.updateTag1(e)} 
+    className="icon" 
+    stroke={this.state.stroke3} 
+    fill={this.state.fill3}
+    fillOpacity="1" 
+    strokeOpacity="1" cx={xPos} cy={yPos} r={this.state.rad}>
+    </circle>;
+
+    return hard;
+  }
+
+   dotReturn4(xPos, yPos) {
+    var hard = 
+    <circle 
+    // onMouseEnter={e => this.displayTag1(e)}
+    // onMouseLeave={e => this.hideTag1(e)}
+    // onMouseMove={e => this.updateTag1(e)} 
+    className="icon" 
+    stroke={this.state.stroke4} 
+    fill={this.state.fill4}
+    fillOpacity="1" 
+    strokeOpacity="1" cx={xPos} cy={yPos} r={this.state.rad}>
+    </circle>;
+
+    return hard;
+  }
+
+  textReturn(xPos, yPos, tedxt){
+    var hard = <text x = {xPos} y = {yPos} fontSize = "10">{tedxt}</text>;
+    return hard;
+  }
+  textReturn2(xPos, yPos, tedxt){
+    var hard = <text x = {xPos} y = {yPos} fontSize = "12" color = "grey">{tedxt}</text>;
+    return hard;
+  }
+
+  rectReturn1(xPos, yPos){
+    var hard = 
+    <rect
+    x = {xPos} y = {yPos} stroke = {this.state.stroke1} fill = {this.state.stroke2} height = {this.state.rectHeight-2} width = {this.state.rect1Width} fillOpacity = "0.7" strokeOpacity = "0.7"></rect>;
+    return hard;
+  }
+
+  rectReturn2(xPos, yPos){
+    var hard = 
+    <rect
+    x = {xPos} y = {yPos +1} stroke = {this.state.stroke1} height = {this.state.rectHeight-2} width = {400} fill = {"none"} strokeOpacity = "0.3"></rect>;
+    return hard;
+  }
+  rectReturn3(xPos, yPos){
+    var hard = 
+    <rect
+    x = {xPos} y = {yPos +1} stroke = {this.state.stroke2} height = {this.state.rectHeight-2} width = {this.state.rect2Width} fillOpacity = "0.7" fill = {this.state.stroke2} strokeOpacity = "0.7"></rect>;
+    return hard;
+  }
+  rectReturn4(xPos, yPos){
+    var hard = 
+    <rect
+    x = {xPos} y = {yPos +1} stroke = {this.state.stroke2} height = {this.state.rectHeight-2} width = {400} fill = {"none"} strokeOpacity = "0.7"></rect>;
+    return hard;
+  }
+  rectReturn5(xPos, yPos){
+    var hard = 
+    <rect
+    x = {xPos} y = {yPos +1} stroke = {this.state.stroke3} height = {this.state.rectHeight-2} width = {this.state.rect3Width} fillOpacity = {0.7} fill = {this.state.stroke3} strokeOpacity = "0.7"></rect>;
+    return hard;
+  }
+  rectReturn6(xPos, yPos){
+    var hard = 
+    <rect
+    x = {xPos} y = {yPos +1} stroke = {this.state.stroke3} height = {this.state.rectHeight-2} width = {400} fill = {"none"} fillOpacity = {0.7}strokeOpacity = "0.7"></rect>;
+    return hard;
+  }
+  rectReturn7(xPos, yPos){
+    var hard = 
+    <rect
+    x = {xPos} y = {yPos} stroke = {this.state.stroke4} height = {this.state.rectHeight-2} fill = {this.state.stroke4} fillOpacity = {0.7} width = {this.state.rect4Width} strokeOpacity = "0.7"></rect>;
+    return hard;
+  }
+  rectReturn8(xPos, yPos){
+    var hard = 
+    <rect
+    x = {xPos} y = {yPos +1} stroke = {this.state.stroke4} height = {this.state.rectHeight-2} width = {400} fill = {"none"} strokeOpacity = "0.3"></rect>;
+    return hard;
+  }
+  /**
+   * Set up dragger when the component mounts
+   */
+  /**
+   * Renders a dragger in the svg
+   */
+
+  
+  // not finished
+
+  render() {
+    const widthFactor = 6;
+    const heightFactor = 3.5;
+    // TODO: change padding so that the entire graph is in the center of the box
+    return (
+      <div style={{ backgroundColor: "pink" }}>
+        <svg width={1000} height={1000/2.5} ref={this.svgRef}>
+
+          {/* rows of dots */}
+          {[...this.state.xPos1].map(
+            (col, index) =>
+              (this.dotReturn1(col + 13,this.state.yPos1[index] - 100))
+          )}
+
+          {[...this.state.xPos2].map(
+            (col, index) =>
+              (this.dotReturn2(col + 13,this.state.yPos2[index]- 100))
+          )}
+
+          {[...this.state.xPos3].map(
+            (col, index) =>
+              (this.dotReturn3(col + 13,this.state.yPos3[index] - 100))
+          )}
+          
+          {[...this.state.xPos4].map(
+            (col, index) =>
+              (this.dotReturn4(col + 13,this.state.yPos4[index] - 100))
+          )}
+                    
+          {/* legend dots */}
+          {/* {this.dotReturn1(this.state.width +220,this.state.height/6 + 70)}
+          {this.dotReturn2(this.state.width +220, this.state.height/6 + 40)}
+          {this.dotReturn3(this.state.width +220, this.state.height/4 +28)}
+          {this.dotReturn4(this.state.width +220, this.state.height/4 +48)} */}
+          {this.dotReturn1(810,20)}
+          {this.dotReturn3(820, 20)}
+          {this.dotReturn2(810, 30)}
+          {this.dotReturn4(820, 30)}
+
+          {/* legend texts */}
+          {/* {this.textReturn(this.state.width + 240, this.state.height/4 + 32, this.state.legendKey[0])}
+          {this.textReturn(this.state.width + 240, this.state.height/4 + 52, this.state.legendKey[1])}
+          {this.textReturn(this.state.width + 240, this.state.height/4 - 8, this.state.legendKey[2])}
+          {this.textReturn(this.state.width + 240, this.state.height/4 - 39, this.state.legendKey[3])} */}
+          {this.textReturn(830, 25, this.state.jsonData["legend1"])}
+          {this.textReturn(830, 35, this.state.jsonData["legend2"])}
+          {this.textReturn2(5, 25, this.state.jsonData["legend3"])}
+          {this.textReturn2(5, 255, this.state.jsonData["legend4"])}
+          {/* indices for columns */}
+          {this.textReturn(this.state.jsonData["placement1"] - 10,45,this.state.jsonData["label1"])}
+          {this.textReturn(this.state.jsonData["placement2"] - 10,45,this.state.jsonData["label2"])}
+          {this.textReturn(this.state.jsonData["placement3"] - 10,245,this.state.jsonData["label3"])}
+          {this.textReturn(this.state.jsonData["placement4"] - 10,245,this.state.jsonData["label4"])}
+
+          {this.line4(this.state.jsonData["placement1"],this.state.jsonData["placement1"],50,125)}
+          {this.line5(this.state.jsonData["placement2"],this.state.jsonData["placement2"],160,235)}
+          {this.line3(this.state.jsonData["placement3"],this.state.jsonData["placement3"],50,125)}
+          {this.line6(this.state.jsonData["placement4"],this.state.jsonData["placement4"],160,235)}
+
+
+          {/* rectangular bars */}
+          {/* {this.rectReturn1(this.state.width/2.5,600)}
+          {this.rectReturn2(this.state.width/2.5,600)}
+          {this.rectReturn3(this.state.width/2.5,650)}
+          {this.rectReturn4(this.state.width/2.5,650)}
+          {this.rectReturn5(this.state.width/2.5,700)}
+          {this.rectReturn6(this.state.width/2.5,700)}
+          {this.rectReturn7(this.state.width/2.5,750)}
+          {this.rectReturn8(this.state.width/2.5,750)} */}
+          {this.rectReturn1(this.state.width/2.5 - 100,this.state.height/heightFactor - 2 * this.state.rad)}
+          {this.rectReturn2(this.state.width/2.5- 100,this.state.height/heightFactor - 2 * this.state.rad)}
+          {this.textReturn2(this.state.width/2.5+ 80,this.state.height/heightFactor - 2 * this.state.rad - 8, this.state.jsonData["legendKey0"])}
+          {this.rectReturn3(this.state.width/2.5 - 100,this.state.height/heightFactor + 30 - 2 * this.state.rad)}
+          {this.rectReturn4(this.state.width/2.5 - 100,this.state.height/heightFactor + 30 - 2 * this.state.rad)}
+          {this.textReturn2(this.state.width/2.5 +80,this.state.height/heightFactor + 30 - 2 * this.state.rad, this.state.jsonData["legendKey1"])}
+          {this.rectReturn5(this.state.width/2.5 - 100,this.state.height/heightFactor + 60 - 2 * this.state.rad)}
+          {this.rectReturn6(this.state.width/2.5 - 100,this.state.height/heightFactor + 60 - 2 * this.state.rad)}
+          {this.textReturn2(this.state.width/2.5 + 80,this.state.height/heightFactor + 60 - 2 * this.state.rad, this.state.jsonData["legendKey2"])}
+          {this.rectReturn7(this.state.width/2.5 - 100,this.state.height/heightFactor + 90 - 2 * this.state.rad)}
+          {this.rectReturn8(this.state.width/2.5 - 100,this.state.height/heightFactor + 90 - 2 * this.state.rad)}
+          {this.textReturn2(this.state.width/2.5 + 80,this.state.height/heightFactor + 90 - 2 * this.state.rad, this.state.jsonData["legendKey3"])}
+
+          {/* sliders */}
+
+        </svg>
+      
+
+        <div>
+        <input type="range" min={this.state.minVal} max={this.state.maxVal} 
+              className="thresh-top-slider" onChange={this.onChange1}
+              name="sliderPos" value={this.state.sliderPos} ref={this.sliderRef}
+              style={{ width: this.state.width, left:0}}/>
+        <input type = "range" min = {this.state.minVal} max = {this.state.maxVal}
+            className = "thresh-bottom-slider" onChange={this.onChange2}
+            name = "sliderPos2" value = {this.state.sliderPos2} ref = {this.slider2Ref}
+            style = {{width: this.state.width, left:0}}/>
+        </div>  
+                <label>Choose a color combination (the first color is on top): </label>
                   <select name="stroke1" id="stroke1" ref={this.stroke1Ref}
                     defaultValue={this.state.stroke1}>
-                    <option value="RBY">Red Blue Yellow</option>
-                    <option value="BRY">Blue Red Yellow</option>
-                    <option value="YBR">Yellow Blue Red</option>
-                    <option value="YRB">Yellow Red Blue</option>
-                    <option value = "RYB">Red Yellow Blue</option>
-                    <option value = "BYR">Blue Yellow Red</option>
+                    <option value="#0000FF">Blue and Red</option>
+                    <option value="#FF0000">Red and Blue</option>
+                    <option value="Orange and Blue">Orange and Blue</option>
+                    <option value="Blue and Orange">Blue and Orange</option>
+                    <option value = "Yellow and Blue">Yellow and Blue</option>
+                    <option value = "Blue and Yellow">Blue and Yellow</option>
                   </select>
                   <input onClick={() => this.changeStroke1()} type="submit" value="Submit"></input>
                   <br></br>
-                  Enter the question text here
-                  <br/>
-                  <input type="text" id = "question" ref={this.arg5ref}
-                    defaultValue={""}/>
-                    <br></br>
-                    Enter the bold question text here (displayed below the question)
-                  <br/>
-                  <input type="text" id = "question" ref={this.arg12ref}
-                    defaultValue={""}/>
-                    <br></br>
-                  Enter the graph one label here
-                  <br/>
-                  <input type="text" id = "question" ref={this.arg1ref}
-                    defaultValue={""}/>
-                    <br></br>
-                  Enter the graph two here
-                  <br/>
-                  <input type="text" id = "question" ref={this.arg2ref}
-                    defaultValue={""}/>
-                    <br></br>
-                  Enter the left hand label of the slider here
-                  <br/>
-                  <input type="text" id = "question" ref={this.arg3ref}
-                    defaultValue={""}/>
-                    <br></br>
-                  Enter the right hand label of the slider here
-                  <br/>
-                  <input type="text" id = "question" ref={this.arg4ref}
-                    defaultValue={""}/>
-                    <br></br>
-                  Enter the graph three label
-                  <br/>
-                  <input type="text" id = "question" ref={this.arg6ref}
-                    defaultValue={""}/>
-                    <br></br>
-                  Enter the graph four label (if applicable)
-                  <br/>
-                  <input type="text" id = "question" ref={this.arg7ref}
-                    defaultValue={""}/>
-                    <br/>
-                                     Enter the first legend entry
-                  <br/>
-                  <input type="text" id = "question" ref={this.arg8ref}
-                    defaultValue={""}/>
-                    <br></br>
-                    Enter the second legend entry
-                  <br/>
-                  <input type="text" id = "question" ref={this.arg9ref}
-                    defaultValue={""}/>
-                    <br></br>
-                    Enter the third legend entry
-                  <br/>
-                  <input type="text" id = "question" ref={this.arg10ref}
-                    defaultValue={""}/>
-                    <br></br>
-                    Enter the fourth legend entry
-                  <br/>
-                  <input type="text" id = "question" ref={this.arg11ref}
-                    defaultValue={""}/>
-                  <button onClick={() => this.onUpdateShapes()}>
-                  Update 
-                   </button> <br/>
-                   <br></br>
-                   Enter the guide line heights from the top left (please input values between 0 and 1; input 0 for no guide line to show)
-                  <br/>
-                  <input name = "refLine1" id = "refLine1" ref = {this.refLine1Ref}></input>
-                  <input onClick = {() => this.onChange10(this.refLine1Ref.current.value)} type = "submit" value = "Submit"></input> 
-                  <br></br>
-                  <input name = "refLine2" id = "refLine2" ref = {this.refLine2Ref}></input>
-                  <input onClick = {() => this.onChange2(this.refLine2Ref.current.value)} type = "submit" value = "Submit"></input> 
-                  <br></br>
-                  <input name = "refLine3" id = "refLine3" ref = {this.refLine3Ref}></input>
-                  <input onClick = {() => this.onChange3(this.refLine3Ref.current.value)} type = "submit" value = "Submit"></input> 
-                  <br></br>
-                  <input name = "refLine4" id = "refLine4" ref = {this.refLine4Ref}></input>
-                  <input onClick = {() => this.onChange4(this.refLine4Ref.current.value)} type = "submit" value = "Submit"></input> 
+                  <text>Enter position of first guide Line (enter "-1000" to remove)</text>
                   <br></br>
                   <input name = "refLine5" id = "refLine5" ref = {this.refLine5Ref}></input>
                   <input onClick = {() => this.onChange5(this.refLine5Ref.current.value)} type = "submit" value = "Submit"></input> 
                   <br></br>
+                  <text>Enter position of second guide Line</text>
+                  <br></br>
                   <input name = "refLine6" id = "refLine6" ref = {this.refLine6Ref}></input>
                   <input onClick = {() => this.onChange6(this.refLine6Ref.current.value)} type = "submit" value = "Submit"></input> 
+                  <br></br>
+                  <text>Enter position of third guide Line</text>
                   <br></br>
                   <input name = "refLine7" id = "refLine7" ref = {this.refLine7Ref}></input>
                   <input onClick = {() => this.onChange7(this.refLine7Ref.current.value)} type = "submit" value = "Submit"></input> 
                   <br></br>
+                  <text>Enter position of fourth guide Line</text>
+                  <br></br>
                   <input name = "refLine8" id = "refLine8" ref = {this.refLine8Ref}></input>
                   <input onClick = {() => this.onChange8(this.refLine8Ref.current.value)} type = "submit" value = "Submit"></input> 
-                  </div>
-                </div>
-        );
-    }
+                  <br></br>
 
+                  <text>Enter first guide line Label             </text>
+                  <input name = "refLine8" id = "refLine8" ref = {this.refText1}></input>
+                  <input onClick = {() => this.onChange9()} type = "submit" value = "Submit"></input> 
+                  <br></br>
+                  <text>Enter second guide line label            </text>
+                  <input name = "refLine8" id = "refLine8" ref = {this.refText2}></input>
+                  <input onClick = {() => this.onChange9()} type = "submit" value = "Submit"></input> 
+                  <br></br>
+                  <text>Enter third guide line label                 </text>
+
+                  <input name = "refLine8" id = "refLine8" ref = {this.refText3}></input>
+                  <input onClick = {() => this.onChange9()} type = "submit" value = "Submit"></input> 
+                  <br></br>
+
+                  <text>Enter fourth guide line label              </text>
+
+                  <input name = "refLine8" id = "refLine8" ref = {this.refText4}></input>
+                  <input onClick = {() => this.onChange9()} type = "submit" value = "Submit"></input> 
+                  <br></br>
+
+                  <text>Enter first graph label             </text>
+                  <input name = "refLine8" id = "refLine8" ref = {this.refText5}></input>
+                  <input onClick = {() => this.onChange11()} type = "submit" value = "Submit"></input> 
+                  <br></br>
+                  <text>Enter second graph label            </text>
+                  <input name = "refLine8" id = "refLine8" ref = {this.refText6}></input>
+                  <input onClick = {() => this.onChange11()} type = "submit" value = "Submit"></input> 
+                  <br></br>
+                  <text>Enter third graph label                </text>
+
+                  <input name = "refLine8" id = "refLine8" ref = {this.refText7}></input>
+                  <input onClick = {() => this.onChange11()} type = "submit" value = "Submit"></input> 
+                  <br></br>
+
+                  <text>Enter fourth graph label             </text>
+
+                  <input name = "refLine8" id = "refLine8" ref = {this.refText8}></input>
+                  <input onClick = {() => this.onChange11()} type = "submit" value = "Submit"></input> 
+                  <br></br>
+                  <text>Enter first legend entry (in the top right)            </text>
+                  <input name = "refLine8" id = "refLine8" ref = {this.refText9}></input>
+                  <input onClick = {() => this.onChange12()} type = "submit" value = "Submit"></input> 
+                  <br></br>
+                  <text>Enter second legend entry     (in the top right)        </text>
+                  <input name = "refLine8" id = "refLine8" ref = {this.refText10}></input>
+                  <input onClick = {() => this.onChange12()} type = "submit" value = "Submit"></input> 
+                  <br></br>
+                  <text>Enter third legend entry     (in the top left)            </text>
+
+                  <input name = "refLine8" id = "refLine8" ref = {this.refText11}></input>
+                  <input onClick = {() => this.onChange12()} type = "submit" value = "Submit"></input> 
+                  <br></br>
+
+                  <text>Enter fourth legend entry    (in the bottom left)           </text>
+
+                  <input name = "refLine8" id = "refLine8" ref = {this.refText12}></input>
+                  <input onClick = {() => this.onChange12()} type = "submit" value = "Submit"></input> 
+                  <br></br>
+      </div>
+    )
+  }
 }
 
-export default TradeoffThree;
+export default ThresholdCurve;
